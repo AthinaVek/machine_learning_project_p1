@@ -65,7 +65,7 @@ int main(int argc, char** argv){
                 {
                     unsigned char temp=0;
                     file.read((char*)&temp,sizeof(temp));
-                    cout << temp << endl;
+                    // cout << temp << endl;
                 }
             }
         }
