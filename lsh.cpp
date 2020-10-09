@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <bits/stdc++.h>
+#include <string>
 
 using namespace std;
 
@@ -19,24 +20,55 @@ int reverseInt (int i)
 }
 
 int main(int argc, char** argv){
-	
+	string iFile, qFile, oFile;
 	int i, k, L, N;
 	double R;
 	
-	if(argc == 5){
-		k = atoi(argv[1]);
-		L = atoi(argv[2]);
-		N = atoi(argv[3]);
-		R = atof(argv[4]);
+	if(argc == 15)
+	{
+		for (int i = 1; i < 15; ++i)
+		{
+			if (argv[i] == "-d")
+			{
+				iFile = argv[i+1];
+			}
+			else if (argv[i] == "-q")
+			{
+				qFile = argv[i+1];
+			}
+			else if (argv[i] == "-k")
+			{
+				k = atoi(argv[i+1]);
+			}
+			else if (argv[i] == "-L")
+			{
+				L = atoi(argv[i+1]);
+			}
+			else if (argv[i] == "-o")
+			{
+				oFile = argv[i+1];
+			}
+			else if (argv[i] == "-N")
+			{
+				N = atoi(argv[i+1]);
+			}
+			else if (argv[i] == "-R")
+			{
+				R = atoi(argv[i+1]);
+			}
+		}
 	}
 	else{
-		k = 4;
-		L = 5;
-		N = 1;
-		R = 1.0;
+		// cout << "Error: Wrong input." << endl;    //THE RIGHT ELSE
+		// return 0;
+
+
+
+		//Delete the above:                          //THE DEBUG ELSE
+		iFile = "train-images-idx3-ubyte";
 	}
 	
-	ifstream file ("train-images-idx3-ubyte");
+	ifstream file (iFile);
     if (file.is_open())
     {
         int magic_number=0;
