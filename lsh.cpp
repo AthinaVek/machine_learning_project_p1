@@ -7,6 +7,7 @@
 #include <iterator> 
 #include <random>
 #include <vector>
+#include <cmath>
 
 using namespace std;
 
@@ -70,12 +71,28 @@ vector<double> get_s(double w, int d){
     uniform_real_distribution<double>  distr(range_from, range_to);
  
     for (int i = 0; i < d; ++i){
-        cout << distr(generator) << '\n';
         sVec.push_back(distr(generator));
     }
 	
+	return sVec;
 }
 
+vector<unsigned int> calculate_a(vector<unsigned char> pVec, vector<double> sVec, double w, int d){			//an argei na to kanoume ena-ena
+	
+	int i;
+	
+	vector<unsigned int> aVec;
+	
+	for(i = 0; i < d; ++i){
+		
+		aVec.push_back(floor(abs(pVec[i] - sVec[i])/w));
+		//cout << sVec[i] << endl;
+		//cout << aVec[i] << endl << endl;
+		
+	}
+	
+	return aVec;
+}
 
 int main(int argc, char** argv){
 	string iFile, qFile, oFile;
@@ -144,6 +161,7 @@ int main(int argc, char** argv){
         int d;
 		
 		vector<double> sVec;
+		vector<unsigned int> aVec;
 		
         file.read((char*)&magic_number,sizeof(magic_number)); 
         magic_number = reverseInt(magic_number);
@@ -157,15 +175,13 @@ int main(int argc, char** argv){
         d = n_rows * n_cols;						//dimension
         
         sVec = get_s(w, d);							//s_i uniform random generator
-        
-        // cout << magic_number << endl;
-        // cout << number_of_images << endl;
-        // cout << n_rows << endl;
-        // cout << n_cols << endl;
 
-        list< list<unsigned char> > pList; 
-    	list<unsigned char> tempList; 
-
+        //list< list<unsigned char> > pList; 
+    	//list<unsigned char> tempList; 
+		
+		vector< vector<unsigned char> > pVec; 
+    	vector<unsigned char> tempVec;
+		
         for(int i=0;i<number_of_images;++i)
         {
             for(int r=0;r<n_rows;++r)
@@ -175,16 +191,18 @@ int main(int argc, char** argv){
                     unsigned char temp=0;
                     file.read((char*)&temp,sizeof(temp));
 
-                    tempList.push_back(temp);
+                    tempVec.push_back(temp);
+                    
                 }
             }
-            pList.push_back(tempList);
-            tempList.erase(tempList.begin(), tempList.end());
+            pVec.push_back(tempVec);
+            tempVec.erase(tempVec.begin(), tempVec.end());
             
             
+            aVec = calculate_a(pVec[i], sVec, w, d);
             
         }
-        //printNestedList(pList); 
+        
     }
 	
 	
