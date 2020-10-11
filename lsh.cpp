@@ -77,17 +77,17 @@ vector<double> get_s(double w, int d){
 	return sVec;
 }
 
-vector<unsigned int> calculate_a(vector<unsigned char> pVec, vector<double> sVec, double w, int d){			//an argei na to kanoume ena-ena
+vector<int> calculate_a(vector<unsigned char> pVec, vector<double> sVec, double w, int d){			//an argei na to kanoume ena-ena
 	
 	int i;
 	
-	vector<unsigned int> aVec;
+	vector<int> aVec;
 	
 	for(i = 0; i < d; ++i){
 		
 		aVec.push_back(floor(abs(pVec[i] - sVec[i])/w));
 		//cout << sVec[i] << endl;
-		//cout << aVec[i] << endl << endl;
+		cout << aVec[i] << endl << endl;
 		
 	}
 	
@@ -161,7 +161,7 @@ int main(int argc, char** argv){
         int d;
 		
 		vector<double> sVec;
-		vector<unsigned int> aVec;
+		vector<int> aVec;
 		
         file.read((char*)&magic_number,sizeof(magic_number)); 
         magic_number = reverseInt(magic_number);
