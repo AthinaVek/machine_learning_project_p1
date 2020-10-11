@@ -5,6 +5,8 @@
 #include <string>
 #include <list> 
 #include <iterator> 
+#include <random>
+#include <vector>
 
 using namespace std;
 
@@ -56,13 +58,29 @@ int reverseInt (int i)
 //     cout << "]"; 
 // } 
 
-
+vector<double> get_s(double w, int d){
+	
+	const double range_from  = 0;
+    const double range_to    = w;
+    
+    vector<double> sVec;
+    
+    random_device rand_dev;
+    mt19937 generator(rand_dev());
+    uniform_real_distribution<double>  distr(range_from, range_to);
+ 
+    for (int i = 0; i < d; ++i){
+        cout << distr(generator) << '\n';
+        sVec.push_back(distr(generator));
+    }
+	
+}
 
 
 int main(int argc, char** argv){
 	string iFile, qFile, oFile;
 	int i, k, L, N;
-	double R;
+	double R, w;
 	
 	if(argc == 15)
 	{
@@ -106,6 +124,14 @@ int main(int argc, char** argv){
 
 		//Delete the above:                          //THE DEBUG ELSE
 		iFile = "train-images-idx3-ubyte";
+		
+		k = 4;				//default values if not given by user
+		L = 5;
+		N = 1;
+		R = 1.0;
+		
+		w = 4 * R;
+		
 	}
 	
 	ifstream file (iFile);
@@ -115,7 +141,10 @@ int main(int argc, char** argv){
         int number_of_images=0;
         int n_rows=0;
         int n_cols=0;
-
+        int d;
+		
+		vector<double> sVec;
+		
         file.read((char*)&magic_number,sizeof(magic_number)); 
         magic_number = reverseInt(magic_number);
         file.read((char*)&number_of_images,sizeof(number_of_images));
@@ -124,6 +153,10 @@ int main(int argc, char** argv){
         n_rows = reverseInt(n_rows);
         file.read((char*)&n_cols,sizeof(n_cols));
         n_cols = reverseInt(n_cols);
+        
+        d = n_rows * n_cols;						//dimension
+        
+        sVec = get_s(w, d);							//s_i uniform random generator
         
         // cout << magic_number << endl;
         // cout << number_of_images << endl;
@@ -146,10 +179,14 @@ int main(int argc, char** argv){
                 }
             }
             pList.push_back(tempList);
-            tempList.erase(tempList.begin(), tempList.end()); 
+            tempList.erase(tempList.begin(), tempList.end());
+            
+            
+            
         }
         //printNestedList(pList); 
     }
+	
 	
 	
 	return 0;
