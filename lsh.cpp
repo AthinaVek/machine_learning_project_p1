@@ -1,16 +1,4 @@
-#include <iostream>
-#include <cstdlib>
-#include <fstream>
-#include <bits/stdc++.h>
-#include <string>
-#include <list> 
-#include <iterator> 
-#include <random>
-#include <vector>
-#include <cmath>
-
 #include "help_functions.h"
-
 
 using namespace std;
 
@@ -68,19 +56,18 @@ int main(int argc, char** argv){
 		N = 1;
 		R = 1.0;
 		
-		w = 4 * R;
+		w = 10 * R;
 		
 	}
 	
 	ifstream file (iFile);
     if (file.is_open())
     {
-        int magic_number=0;
-        int number_of_images=0;
-        int n_rows=0;
-        int n_cols=0;
-        int d;
-		
+        int magic_number=0, number_of_images=0;
+        int n_rows=0, n_cols=0;
+        int d, m = 2^29, M;
+
+		M = 2^(32/k);
 		vector<double> sVec;
 		vector<int> aVec;
 		
@@ -123,7 +110,10 @@ int main(int argc, char** argv){
             aVec = calculate_a(pVec[i], sVec, w, d);
             
         }
+
         
+        int h = calculate_h(aVec, m, M, d);
+        // cout << h << endl;
     }
 	
 	
