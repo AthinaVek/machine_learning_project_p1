@@ -1,5 +1,7 @@
 #include "help_functions.h"
 
+#define m 536870912
+
 using namespace std;
 
 
@@ -65,9 +67,10 @@ int main(int argc, char** argv){
     {
         int magic_number=0, number_of_images=0;
         int n_rows=0, n_cols=0;
-        int d, m = 2^29, M;
-
-		M = 2^(32/k);
+        int d, M;
+        
+        M = pow(2,(32/k));
+		
 		vector<double> sVec;
 		vector<int> aVec;
 		
@@ -108,12 +111,12 @@ int main(int argc, char** argv){
             
             
             aVec = calculate_a(pVec[i], sVec, w, d);
-            
+            //calculate s_i here for every hashtable
         }
 
         
         int h = calculate_h(aVec, m, M, d);
-        // cout << h << endl;
+        cout << h << endl;
     }
 	
 	
