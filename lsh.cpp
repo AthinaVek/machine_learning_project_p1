@@ -72,7 +72,7 @@ int main(int argc, char** argv){
         
         M = pow(2,(32/k));
 		
-		vector<double> sVec;
+		vector<int> sVec;
 		vector<int> aVec;
 		vector< vector<int> > hVec;
 		vector<int> tempHVec;
@@ -95,13 +95,13 @@ int main(int argc, char** argv){
     	vector<unsigned char> tempVec;
 
 
-        for(int i=0; i<number_of_images; i++)
+        for(int i = 0; i < number_of_images; i++)
         {
-            for(int r=0; r<n_rows; ++r)
+            for(int r = 0; r < n_rows; r++)
             {
-                for(int c=0;c<n_cols;++c)
+                for(int c = 0; c < n_cols; c++)
                 {
-                    unsigned char temp=0;
+                    unsigned char temp = 0;
                     file.read((char*)&temp,sizeof(temp));
 
                     tempVec.push_back(temp);
@@ -113,14 +113,14 @@ int main(int argc, char** argv){
         }
 
 
-        for (int i=0; i<k; i++){
+        for (int i = 0; i < k; i++){
         	sVec = get_s(w, d);							//s_i uniform random generator
 
-        	for (int j=0; j<number_of_images; j++){
+        	for (int j = 0; j < number_of_images; j++){
 				aVec = calculate_a(pVec[j], sVec, w, d);
 				h = calculate_h(aVec, m, M, d);
 				tempHVec.push_back(h);
-        		// cout << h << endl;
+        		//cout << h << endl;
         	}
         	hVec.push_back(tempHVec);
         	tempHVec.erase(tempHVec.begin(), tempHVec.end());
