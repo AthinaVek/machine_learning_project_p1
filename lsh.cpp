@@ -93,7 +93,8 @@ int main(int argc, char** argv){
 		
 		vector< vector<unsigned char> > pVec; 
     	vector<unsigned char> tempVec;
-		
+
+
         for(int i=0; i<number_of_images; i++)
         {
             for(int r=0; r<n_rows; ++r)
@@ -111,17 +112,21 @@ int main(int argc, char** argv){
             
         }
 
+
         for (int i=0; i<k; i++){
         	sVec = get_s(w, d);							//s_i uniform random generator
 
         	for (int j=0; j<number_of_images; j++){
 				aVec = calculate_a(pVec[j], sVec, w, d);
-				tempHVec.push_back(calculate_h(aVec, m, M, d));
-        		cout << h << endl;
+				h = calculate_h(aVec, m, M, d);
+				tempHVec.push_back(h);
+        		// cout << h << endl;
         	}
         	hVec.push_back(tempHVec);
         	tempHVec.erase(tempHVec.begin(), tempHVec.end());
         }
+
+        //calculate g for every k
     }
 	
 	
