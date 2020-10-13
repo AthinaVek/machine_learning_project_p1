@@ -68,11 +68,14 @@ int main(int argc, char** argv){
         int magic_number=0, number_of_images=0;
         int n_rows=0, n_cols=0;
         int d, M;
+        int h;
         
         M = pow(2,(32/k));
 		
 		vector<double> sVec;
 		vector<int> aVec;
+		vector< vector<int> > hVec;
+		vector<int> tempHVec;
 		
         file.read((char*)&magic_number,sizeof(magic_number)); 
         magic_number = reverseInt(magic_number);
@@ -84,8 +87,6 @@ int main(int argc, char** argv){
         n_cols = reverseInt(n_cols);
         
         d = n_rows * n_cols;						//dimension
-        
-        sVec = get_s(w, d);							//s_i uniform random generator
 
         //list< list<unsigned char> > pList; 
     	//list<unsigned char> tempList; 
@@ -93,9 +94,9 @@ int main(int argc, char** argv){
 		vector< vector<unsigned char> > pVec; 
     	vector<unsigned char> tempVec;
 		
-        for(int i=0;i<number_of_images;++i)
+        for(int i=0; i<number_of_images; i++)
         {
-            for(int r=0;r<n_rows;++r)
+            for(int r=0; r<n_rows; ++r)
             {
                 for(int c=0;c<n_cols;++c)
                 {
@@ -103,20 +104,24 @@ int main(int argc, char** argv){
                     file.read((char*)&temp,sizeof(temp));
 
                     tempVec.push_back(temp);
-                    
                 }
             }
             pVec.push_back(tempVec);
             tempVec.erase(tempVec.begin(), tempVec.end());
             
-            
-            aVec = calculate_a(pVec[i], sVec, w, d);
-            //calculate s_i here for every hashtable
         }
 
-        
-        int h = calculate_h(aVec, m, M, d);
-        cout << h << endl;
+        for (int i=0; i<k; i++){
+        	sVec = get_s(w, d);							//s_i uniform random generator
+
+        	for (int j=0; j<number_of_images; j++){
+				aVec = calculate_a(pVec[j], sVec, w, d);
+				tempHVec.push_back(calculate_h(aVec, m, M, d));
+        		cout << h << endl;
+        	}
+        	hVec.push_back(tempHVec);
+        	tempHVec.erase(tempHVec.begin(), tempHVec.end());
+        }
     }
 	
 	
