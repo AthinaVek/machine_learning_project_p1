@@ -1,3 +1,5 @@
+#include <bitset>
+
 #include "help_functions.h"
 
 #define m 536870912
@@ -68,14 +70,17 @@ int main(int argc, char** argv){
         int magic_number=0, number_of_images=0;
         int n_rows=0, n_cols=0;
         int d, M;
-        int h;
+        int h, g;
         
         M = pow(2,(32/k));
 		
+		vector< vector<unsigned char> > pVec; 
+    	vector<unsigned char> tempVec;
 		vector<int> sVec;
 		vector<int> aVec;
 		vector< vector<int> > hVec;
 		vector<int> tempHVec;
+		vector<int> gVec;
 		
         file.read((char*)&magic_number,sizeof(magic_number)); 
         magic_number = reverseInt(magic_number);
@@ -91,10 +96,6 @@ int main(int argc, char** argv){
         //list< list<unsigned char> > pList; 
     	//list<unsigned char> tempList; 
 		
-		vector< vector<unsigned char> > pVec; 
-    	vector<unsigned char> tempVec;
-
-
         for(int i = 0; i < number_of_images; i++)
         {
             for(int r = 0; r < n_rows; r++)
@@ -113,20 +114,40 @@ int main(int argc, char** argv){
         }
 
 
-        for (int i = 0; i < k; i++){
-        	sVec = get_s(w, d);							//s_i uniform random generator
+        //~ for (int i = 0; i < k; i++){
+        	//~ sVec = get_s(w, d);							//s_i uniform random generator
 
-        	for (int j = 0; j < number_of_images; j++){
-				aVec = calculate_a(pVec[j], sVec, w, d);
+        	//~ for (int j = 0; j < number_of_images; j++){
+				//~ aVec = calculate_a(pVec[j], sVec, w, d);
+				//~ h = calculate_h(aVec, m, M, d);
+				//~ tempHVec.push_back(h);
+        		//~ //cout << h << endl;
+        	//~ }
+        	//~ hVec.push_back(tempHVec);
+        	//~ tempHVec.erase(tempHVec.begin(), tempHVec.end());
+        	
+        	//~ aVec = calculate_a(pVec[0], sVec, w, d);
+        	//~ h = calculate_h(aVec, m, M, d);
+        	//~ hVec.push_back(h);
+        //~ }
+        
+        for (int i = 0; i < number_of_images; i++){
+			for (int j = 0; j < k; j++){
+				sVec = get_s(w, d);							//s_i uniform random generator
+				
+				aVec = calculate_a(pVec[i], sVec, w, d);
 				h = calculate_h(aVec, m, M, d);
 				tempHVec.push_back(h);
-        		//cout << h << endl;
-        	}
-        	hVec.push_back(tempHVec);
+			}
+			hVec.push_back(tempHVec);
         	tempHVec.erase(tempHVec.begin(), tempHVec.end());
-        }
-
-        //calculate g for every k
+        	
+        	g = calculate_g(hVec[i]);
+        	gVec.push_back(g);
+		}
+        
+       
+		
     }
 	
 	
