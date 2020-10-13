@@ -1,6 +1,7 @@
 #include <bitset>
 
 #include "help_functions.h"
+#include "calculations.h"
 
 #define m 536870912
 
