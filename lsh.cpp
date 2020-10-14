@@ -1,7 +1,9 @@
 #include "help_functions.h"
 #include "calculations.h"
+#include "hash_table.h"
 
 #define m 536870912    // 2^29
+#define NForTable 16
 
 using namespace std;
 
@@ -14,6 +16,7 @@ int main(int argc, char** argv){
     int n_rows=0, n_cols=0;
     int d, M, h;
     unsigned int g;
+    int hTableSize;
 
 	vector< vector<unsigned char> > pVec; 
 	vector<unsigned char> tempVec;
@@ -22,6 +25,7 @@ int main(int argc, char** argv){
 	vector< vector<int> > hVec;
 	vector<int> tempIntVec;
 	vector<unsigned int> gVec;
+	
 	
 	if(argc == 15){                           // Read input
 		for (int i = 1; i < 15; ++i){
@@ -49,14 +53,9 @@ int main(int argc, char** argv){
 		}
 	}
 	else{
-		// cout << "Error: Wrong input." << endl;    //THE RIGHT ELSE
-		// return 0;
+		cout << "No input given. Using default values." << endl << endl;
 
-
-
-		//Delete the above:                          //THE DEBUG ELSE
 		iFile = "train-images-idx3-ubyte";
-		
 		k = 4;				//default values if not given by user
 		L = 5;
 		N = 1;
@@ -78,6 +77,7 @@ int main(int argc, char** argv){
         n_cols = reverseInt(n_cols);
         
         d = n_rows * n_cols;						//dimension
+        hTableSize = number_of_images / NForTable;
 
         for(int i = 0; i < number_of_images; i++){
             for(int r = 0; r < n_rows; r++){
@@ -92,13 +92,17 @@ int main(int argc, char** argv){
             tempVec.erase(tempVec.begin(), tempVec.end());
         }
 
+		// for L
+
+        vector< list<HashTableNode> > hashTable[hTableSize];
+
         for (int i=0; i<k; i++){
 			tempIntVec = get_s(w, d);        //s_i uniform random generator
 			sVec.push_back(tempIntVec);
 			tempIntVec.erase(tempIntVec.begin(), tempIntVec.end());
         }
         
-        for (int i = 0; i < number_of_images; i++){
+        for (int i=0; i < number_of_images; i++){
 			for (int j = 0; j < k; j++){
 				aVec = calculate_a(pVec[i], sVec[j], w, d);
 				h = calculate_h(aVec, m, M, d);
@@ -108,11 +112,16 @@ int main(int argc, char** argv){
         	tempIntVec.erase(tempIntVec.begin(), tempIntVec.end());
         	
         	g = calculate_g(hVec[i], k);
-        	gVec.push_back(g);
+        	//gVec.push_back(g);
+
+        	insertToHashTable(hashTable, g, pVec[i], hTableSize);
 		}
 		
+		
+
+
+
+
     }
-	
-	
 	return 0;
 }
