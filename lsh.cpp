@@ -77,10 +77,10 @@ int main(int argc, char** argv){
 		
 		vector< vector<unsigned char> > pVec; 
     	vector<unsigned char> tempVec;
-		vector<int> sVec;
+		vector< vector<int> > sVec;
 		vector<int> aVec;
 		vector< vector<int> > hVec;
-		vector<int> tempHVec;
+		vector<int> tempIntVec;
 		vector<unsigned int> gVec;
 		
         file.read((char*)&magic_number,sizeof(magic_number)); 
@@ -131,26 +131,28 @@ int main(int argc, char** argv){
         	//~ h = calculate_h(aVec, m, M, d);
         	//~ hVec.push_back(h);
         //~ }
+
+
+        for (int i=0; i<k; i++){
+			tempIntVec = get_s(w, d);        //s_i uniform random generator
+			sVec.push_back(tempIntVec);
+			tempIntVec.erase(tempIntVec.begin(), tempIntVec.end());
+        }
         
         for (int i = 0; i < number_of_images; i++){
 			for (int j = 0; j < k; j++){
-				sVec = get_s(w, d);							//s_i uniform random generator
-				
-				aVec = calculate_a(pVec[i], sVec, w, d);
+				aVec = calculate_a(pVec[i], sVec[j], w, d);
 				h = calculate_h(aVec, m, M, d);
-				tempHVec.push_back(h);
+				tempIntVec.push_back(h);
 			}
-			hVec.push_back(tempHVec);
-        	tempHVec.erase(tempHVec.begin(), tempHVec.end());
+			hVec.push_back(tempIntVec);
+        	tempIntVec.erase(tempIntVec.begin(), tempIntVec.end());
         	
-        	g = calculate_g(hVec[i]);
+        	g = calculate_g(hVec[i], k);
         	gVec.push_back(g);
 		}
-        
-       
 		
     }
-	
 	
 	
 	return 0;
