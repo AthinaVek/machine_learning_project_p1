@@ -36,7 +36,7 @@ int calculate_h(vector<int> aVec, int m, int M, int d){
 	j = d-1;
 
 	for(int i = 0; i < d; i++){									//modulo
-		x = ((aVec[j]%M) * (m^i)%M) % M;
+		x = ((aVec[j]%M) * (m^i)%M) % M;						//pow(m,i)
 
 		h += x % M;
 		j--;
@@ -69,5 +69,7 @@ int calculate_g(vector<int> hVec){
 	bitset<32> x(g);
 	//cout << "g is: " << x << endl;
 	//cout << "g(int) is: " << g << endl;
+	
+	return g;
 	
 }
