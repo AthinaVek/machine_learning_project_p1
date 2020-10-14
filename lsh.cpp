@@ -1,5 +1,3 @@
-#include <bitset>
-
 #include "help_functions.h"
 #include "calculations.h"
 
@@ -71,7 +69,9 @@ int main(int argc, char** argv){
         int magic_number=0, number_of_images=0;
         int n_rows=0, n_cols=0;
         int d, M;
-        int h, g;
+        int h;
+        
+        unsigned int g;
         
         M = pow(2,(32/k));
 		
@@ -81,7 +81,7 @@ int main(int argc, char** argv){
 		vector<int> aVec;
 		vector< vector<int> > hVec;
 		vector<int> tempHVec;
-		vector<int> gVec;
+		vector<unsigned int> gVec;
 		
         file.read((char*)&magic_number,sizeof(magic_number)); 
         magic_number = reverseInt(magic_number);
