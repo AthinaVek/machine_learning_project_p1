@@ -2,7 +2,7 @@
 #include "calculations.h"
 
 #define m 536870912    // 2^29
-#define NForTable 16
+#define NForTable 8
 
 using namespace std;
 
@@ -25,7 +25,7 @@ int main(int argc, char** argv){
 	vector<int> aVec;
 	vector< vector<int> > hVec;
 	vector<int> tempIntVec;
-	
+	vector<unsigned char> qVec;
 	
 	if(argc == 15){                                          // Read input
 		for (int i = 1; i < 15; ++i){
@@ -56,10 +56,11 @@ int main(int argc, char** argv){
 		cout << "No input given. Using default values." << endl << endl;
 
 		iFile = "train-images-idx3-ubyte";                   //default values if not given by user
+		qFile = "t10k-images-idx3-ubyte";
 		k = 4;				
 		L = 5;
 		N = 1;
-		R = 1.0;
+		R = 10000;
 		w = 10 * R;
 	}
 	
@@ -92,32 +93,63 @@ int main(int argc, char** argv){
             tempVec.erase(tempVec.begin(), tempVec.end());
         }
 
-		// for L
+        vector < vector< vector <vector<unsigned char> > > > lHashTables;       // vector with L hash tables
         vector< vector <vector<unsigned char> > > hashTable;       // hash table
-        for(int y=0; y<hTableSize; y++){
-		    hashTable.push_back(vector<vector<unsigned char> >()); //initialize the first index with a 2D vector
+
+		for (int l=0; l<L; l++){
+	        for(int y=0; y<hTableSize; y++){
+			    hashTable.push_back(vector<vector<unsigned char> >()); //initialize the first index with a 2D vector
+			}
+
+	        for (int i=0; i<k; i++){
+				tempIntVec = get_s(w, d);                     //s_i uniform random generator
+				sVec.push_back(tempIntVec);
+				tempIntVec.erase(tempIntVec.begin(), tempIntVec.end());
+	        }
+	        
+	        for (int i=0; i < number_of_images; i++){
+				for (int j = 0; j < k; j++){
+					aVec = calculate_a(pVec[i], sVec[j], w, d);  // calculate a for every image
+					h = calculate_h(aVec, m, M, d);              // calculate h for every image
+					tempIntVec.push_back(h);
+				}
+				hVec.push_back(tempIntVec);                      // save k*h of every image
+	        	tempIntVec.erase(tempIntVec.begin(), tempIntVec.end());
+	        	
+	        	g = calculate_g(hVec[i], k);                  // calculate g for every image
+	        	pos = g % hTableSize;                         // find the position to insert the image in the hash table
+	        	hashTable[pos].push_back(pVec[i]);            // insert image in the hash table
+			}
+		
+			// for (int i=0; i<hTableSize; i++){
+			// 	cout << l << "lllll" << i << "------" << hashTable[i].size() << endl;
+			// }
+
+			lHashTables.push_back(hashTable);
+			hashTable.erase(hashTable.begin(), hashTable.end());
 		}
 
-        for (int i=0; i<k; i++){
-			tempIntVec = get_s(w, d);                     //s_i uniform random generator
-			sVec.push_back(tempIntVec);
-			tempIntVec.erase(tempIntVec.begin(), tempIntVec.end());
-        }
-        
-        for (int i=0; i < number_of_images; i++){
-			for (int j = 0; j < k; j++){
-				aVec = calculate_a(pVec[i], sVec[j], w, d);  // calculate a for every image
-				h = calculate_h(aVec, m, M, d);              // calculate h for every image
-				tempIntVec.push_back(h);
-			}
-			hVec.push_back(tempIntVec);                      // save k*h of every image
-        	tempIntVec.erase(tempIntVec.begin(), tempIntVec.end());
-        	
-        	g = calculate_g(hVec[i], k);                  // calculate g for every image
-        	pos = g % hTableSize;                         // find the position to insert the image in the hash table
-        	hashTable[pos].push_back(pVec[i]);            // insert image in the hash table
+
+
+
+		ifstream file (qFile);
+	    if (file.is_open()){
+			for(int r = 0; r < n_rows; r++){
+	            for(int c = 0; c < n_cols; c++){
+	                unsigned char temp = 0;
+	                file.read((char*)&temp,sizeof(temp));
+
+	                qVec.push_back(temp);
+	            }
+	        }
+
 		}
-	
+		else{
+			cout << "Could not open query file." << endl;
+		}
+    }
+    else {
+    	cout << "Could not open input file." << endl;
     }
 	return 0;
 }
