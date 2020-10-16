@@ -12,10 +12,10 @@
 #include <vector>
 #include <cmath>
 
+
 using namespace std;
 
 int reverseInt (int i);
-
 
 // void printNestedList(list<list<unsigned char> > nested_list);
 
