@@ -143,6 +143,18 @@ int main(int argc, char** argv){
 	            }
 	        }
 
+	    unsigned int dist;
+
+	    dist = manhattan_dist(pVec[0], qVec, d);
+	    cout << dist << endl;
+	    // dist = manhattan_dist(pVec[1], qVec, d);
+	    // cout << dist << endl;
+	    // dist = manhattan_dist(pVec[2], qVec, d);
+	    // cout << dist << endl;
+
+
+
+
 		}
 		else{
 			cout << "Could not open query file." << endl;
