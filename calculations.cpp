@@ -73,3 +73,19 @@ unsigned int calculate_g(vector<int> hVec, int k){
 	return g;
 	
 }
+
+unsigned int manhattan_dist(vector<unsigned char> qVec, vector<unsigned char> pVec, int d){
+	
+	unsigned int dist = 0;
+	
+	for(int i = 0; i < d; i++){
+		dist+= abs(qVec[i] - pVec[i]);
+	}
+	
+	return dist;
+	
+}
+
+
+
+
