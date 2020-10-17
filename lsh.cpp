@@ -161,7 +161,7 @@ int main(int argc, char** argv){
 	            tempVec.erase(tempVec.begin(), tempVec.end());
 	        }
 		
-		for(int i = 0; i < number_of_images; i++){
+		for(int i = 0; i < 20; i++){
 			
 			for (int j = 0; j < k; j++){
 				aVec = calculate_a(qVec[i], sVec[j], w, d);  // calculate a for every image
@@ -172,9 +172,10 @@ int main(int argc, char** argv){
 			g = calculate_g(tempIntVec, k);                  // calculate g for every image
 			pos = g % hTableSize;                         // find the position to insert the image in the hash table
 		
-			dist = nearest_neighbor(qVec[i], lHashTables, L, pos, d);
+			dist = approximate_nearest_neighbor(qVec[i], lHashTables, L, pos, d);
 			
-			//cout << i << " " << dist << endl;
+			dist = actual_nearest_neighbor(qVec[i], pVec, d);
+			
 		}
 
 

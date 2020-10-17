@@ -86,7 +86,7 @@ unsigned int manhattan_dist(vector<unsigned char> qVec, vector<unsigned char> pV
 	
 }
 
-unsigned int nearest_neighbor(vector<unsigned char> qVec, vector < vector< vector <vector<unsigned char> > > > lHashTables, int L, int pos, int d){
+unsigned int approximate_nearest_neighbor(vector<unsigned char> qVec, vector < vector< vector <vector<unsigned char> > > > lHashTables, int L, int pos, int d){
 	
 	unsigned int dist = 4294967295, temp;							//highest possible unsigned int
 	
@@ -110,7 +110,25 @@ unsigned int nearest_neighbor(vector<unsigned char> qVec, vector < vector< vecto
 	
 }
 
-
+unsigned int actual_nearest_neighbor(vector<unsigned char>  qVec, vector< vector< unsigned char> > pVec, int d){
+	
+	unsigned int dist = 4294967295, temp;							//highest possible unsigned int
+			
+	for( int j = 0; j < pVec.size(); j++){
+		
+		temp = manhattan_dist(qVec, pVec[j], d);
+		
+		if(temp < dist){
+			dist = temp;
+			
+			//number of neighbor
+		}
+		
+	}
+	
+	return dist;
+	
+}
 
 
 
