@@ -91,7 +91,7 @@ unsigned int approximate_nearest_neighbor(vector<unsigned char> qVec, vector < v
 	 unsigned int temp;							//highest possible unsigned int
 	 vector<unsigned int> distances[N];
 	
-	 forfor(int i = 0; i < N; i++){
+	 for(int i = 0; i < N; i++){
 		
 		 distances[i] = 4294967295;
 		
