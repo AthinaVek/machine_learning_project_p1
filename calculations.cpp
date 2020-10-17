@@ -19,7 +19,7 @@ vector<int> get_s(double w, int d){
 }
 
 
-vector<int> calculate_a(vector<unsigned char> pVec, vector<int> sVec, double w, int d){			//an argei na to kanoume ena-ena
+vector<int> calculate_a(vector<int> pVec, vector<int> sVec, double w, int d){			//an argei na to kanoume ena-ena
 	vector<int> aVec;
 	
 	for(int i = 0; i < d; i++){
@@ -74,7 +74,7 @@ unsigned int calculate_g(vector<int> hVec, int k){
 	
 }
 
-unsigned int manhattan_dist(vector<unsigned char> qVec, vector<unsigned char> pVec, int d){
+unsigned int manhattan_dist(vector<int> qVec, vector<int> pVec, int d){
 	
 	unsigned int dist = 0;
 	
