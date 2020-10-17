@@ -86,29 +86,47 @@ unsigned int manhattan_dist(vector<unsigned char> qVec, vector<unsigned char> pV
 	
 }
 
-unsigned int approximate_nearest_neighbor(vector<unsigned char> qVec, vector < vector< vector <vector<unsigned char> > > > lHashTables, int L, int pos, int d){
+unsigned int approximate_nearest_neighbor(vector<unsigned char> qVec, vector < vector< vector <vector<unsigned char> > > > lHashTables, int L, int pos, int d, int N){
 	
-	unsigned int dist = 4294967295, temp;							//highest possible unsigned int
+	 unsigned int temp;							//highest possible unsigned int
+	 vector<unsigned int> distances[N];
 	
-	
-	for(int i = 0; i < L; i++){
+	 forfor(int i = 0; i < N; i++){
 		
-		for(int j = 0; j < lHashTables[i][pos].size(); j++){
+		 distances[i] = 4294967295;
+		
+	 }
+	
+	 for(int i = 0; i < L; i++){
+		
+		 for(int j = 0; j < lHashTables[i][pos].size(); j++){
 			
-			temp = manhattan_dist(qVec, lHashTables[i][pos][j], d);
-			if(temp < dist){
-				dist = temp;
+			 temp = manhattan_dist(qVec, lHashTables[i][pos][j], d);
+			 if(temp < distances[N-1]){
 				
-				//number of neighbor
-			}
+				 for(int c = 0; c < N; c++){
+					
+					 if(temp < distances[c]){
+						// vector<int> v{1,2,3,4,5};
+	
+						// for(int i=3;i>0;i--){
+							// iter_swap(v.begin() + i, v.begin() + i+1);
+						// }
+											
+					 }
+					
+				 }
+				
+				 //number of neighbor
+			 }
 			
-		}
+		 }
 		
-	}
+	 }
 	
-	return dist;
+	 //return dist;
 	
-}
+ }
 
 unsigned int actual_nearest_neighbor(vector<unsigned char>  qVec, vector< vector< unsigned char> > pVec, int d){
 	

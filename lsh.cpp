@@ -1,6 +1,8 @@
 #include "help_functions.h"
 #include "calculations.h"
 
+#include <algorithm>
+
 #define m 536870912    // 2^29
 #define NForTable 8
 
@@ -171,8 +173,8 @@ int main(int argc, char** argv){
 			
 			g = calculate_g(tempIntVec, k);                  // calculate g for every image
 			pos = g % hTableSize;                         // find the position to insert the image in the hash table
-		
-			dist = approximate_nearest_neighbor(qVec[i], lHashTables, L, pos, d);
+			
+			dist = approximate_nearest_neighbor(qVec[i], lHashTables, L, pos, d, N);
 			
 			dist = actual_nearest_neighbor(qVec[i], pVec, d);
 			
