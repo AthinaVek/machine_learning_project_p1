@@ -169,20 +169,16 @@ int main(int argc, char** argv){
 						h = calculate_h(aVec, m, M, d);              // calculate h for every image
 						tempIntVec.push_back(h);
 					}
-					
 					g = calculate_g(tempIntVec, k);                  // calculate g for every image
 					pos = g % hTableSize;                         // find the position to insert the image in the hash table
 					
-					// approximate_nearest_neighbor(qVec[i], lHashTables, L, pos, d, N, ofile);
-					
-					// actual_nearest_neighbor(qVec[i], pVec, d, ofile);
-
+					ofile  << "Query: " << i << endl;
+					approximate_nearest_neighbor(qVec[i], lHashTables, L, pos, d, N, ofile);
+					actual_nearest_neighbor(qVec[i], pVec, d, ofile);
 					approximate_range_search( qVec[i], lHashTables, L, pos, d, R, ofile);
-					
+					ofile << endl;
 				}
 			}
-
-
 		}
 		else{
 			cout << "Could not open query file." << endl;

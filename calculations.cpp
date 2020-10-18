@@ -115,14 +115,16 @@ void approximate_nearest_neighbor(vector<unsigned char> qVec, vector < vector< v
 			}
 		}
 	}
+
+	
 	if (distances.size() == 0){
-		ofile << "No neighbors." << endl << endl;
+		ofile << "No lsh neighbors." << endl;
 	}
 	else{
-		for(int c=0; c<N-1; c++){
-			ofile << distances[c].pPos << "    val: " << distances[c].dist << ", ";
+		for(int c=0; c<N; c++){
+			ofile << "Nearest neighbor-N:" << distances[c].pPos << endl;
+			ofile << "distanceLSH: " << distances[c].dist << endl;
 		}
-		ofile  << distances[N-1].pPos << "    val: " << distances[N-1].dist << endl;
 	}
  }
 
@@ -135,14 +137,13 @@ void actual_nearest_neighbor(vector<unsigned char>  qVec, vector< vector< unsign
 	node.dist = 4294967295;	                             //highest possible unsigned int
 			
 	for( int j = 0; j < pVec.size(); j++){
-		
 		temp = manhattan_dist(qVec, pVec[j], d);
 		if(temp < node.dist){
 			node.dist = temp;
 			node.pPos = j;
 		}
 	}
-	ofile  << node.pPos << "    val: " << node.dist << endl;
+	ofile  << "distanceTrue: " << node.dist << endl;
 }
 
 
@@ -154,7 +155,6 @@ void approximate_range_search(vector<unsigned char> qVec, vector < vector< vecto
 	distanceNode node;
 	
 	for(int i = 0; i < L; i++){
-
 		for(int j = 0; j < lHashTables[i][pos].size(); j++){
 			temp = manhattan_dist(qVec, lHashTables[i][pos][j].pVec, d);
 			if(temp < R){
@@ -165,14 +165,14 @@ void approximate_range_search(vector<unsigned char> qVec, vector < vector< vecto
 		}
 	}
 
+	ofile << ":R-near neighbors:" << endl;
 	if (distances.size() == 0){
-		ofile << "No neighbors in this range." << endl << endl;
+		ofile << "No neighbors in this range." << endl;
 	}
 	else{
-		for(c=0; c<distances.size()-1; c++){
-			ofile << distances[c].pPos << "    val: " << distances[c].dist << ", ";
+		for(c=0; c<distances.size(); c++){
+			ofile << distances[c].pPos << endl;
 		}
-		ofile  << distances[c].pPos << "    val: " << distances[c].dist << endl;
 	}
  }
 
