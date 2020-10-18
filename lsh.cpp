@@ -34,25 +34,25 @@ int main(int argc, char** argv){
 	
 	if(argc == 15){                                          // Read input
 		for (int i = 1; i < 15; ++i){
-			if (argv[i] == "-d"){
+			if (string(argv[i]) == "-d"){
 				iFile = argv[i+1];
 			}
-			else if (argv[i] == "-q"){
+			else if (string(argv[i]) == "-q"){
 				qFile = argv[i+1];
 			}
-			else if (argv[i] == "-k"){
+			else if (string(argv[i]) == "-k"){
 				k = atoi(argv[i+1]);
 			}
-			else if (argv[i] == "-L"){
+			else if (string(argv[i]) == "-L"){
 				L = atoi(argv[i+1]);
 			}
-			else if (argv[i] == "-o"){
+			else if (string(argv[i]) == "-o"){
 				oFile = argv[i+1];
 			}
-			else if (argv[i] == "-N"){
+			else if (string(argv[i]) == "-N"){
 				N = atoi(argv[i+1]);
 			}
-			else if (argv[i] == "-R"){
+			else if (string(argv[i]) == "-R"){
 				R = atof(argv[i+1]);
 			}
 		}
