@@ -86,12 +86,12 @@ unsigned int manhattan_dist(vector<unsigned char> qVec, vector<unsigned char> pV
 	
 }
 
-void approximate_nearest_neighbor(vector<unsigned char> qVec, vector < vector< vector <vector<unsigned char> > > > lHashTables, int L, int pos, int d, int N){
-	unsigned int temp;							//highest possible unsigned int
+void approximate_nearest_neighbor(vector<unsigned char> qVec, vector < vector< vector <vector<unsigned char> > > > lHashTables, int L, int pos, int d, int N, ofstream &ofile){
+	unsigned int temp;
 	vector<unsigned int> distances;
 	
 	for(int i = 0; i < N; i++){
-		distances.push_back(4294967295);
+		distances.push_back(4294967295);							//highest possible unsigned int
 	}
 	
 	for(int i = 0; i < L; i++){
@@ -103,7 +103,6 @@ void approximate_nearest_neighbor(vector<unsigned char> qVec, vector < vector< v
 				distances[N-1] = temp;
 				for(int c=N-2; c>=0; c--){
 					if(distances[c] > distances[c+1]){
-						cout << distances[c] << "    " << distances[c+1] << endl;
 						iter_swap(distances.begin() + c, distances.begin() + c+1);
 					}
 					else{
@@ -114,10 +113,10 @@ void approximate_nearest_neighbor(vector<unsigned char> qVec, vector < vector< v
 			}
 		}
 	}
-	for(int c=0; c<N; c++){
-		cout << distances[c] << " - ";
+	for(int c=0; c<N-1; c++){
+		ofile << distances[c] << ", ";
 	}
-	cout << endl;
+	ofile << distances[N-1] << endl;
  }
 
 unsigned int actual_nearest_neighbor(vector<unsigned char>  qVec, vector< vector< unsigned char> > pVec, int d){
