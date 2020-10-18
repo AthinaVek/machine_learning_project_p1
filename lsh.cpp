@@ -20,7 +20,6 @@ int main(int argc, char** argv){
     int d, M, h, pos;
     unsigned int g;
     int hTableSize;
-    int image_number_in_query_set, image_number_in_data_set;
 
 	vector< vector<unsigned char> > pVec; 
 	vector<unsigned char> tempVec;
@@ -70,11 +69,12 @@ int main(int argc, char** argv){
 		w = 8 * R;
 	}
 	
+	M = pow(2,(32/k));
+	
 	ifstream file (iFile);
     if (file.is_open()){
-        M = pow(2,(32/k));
-		
-        file.read((char*)&magic_number,sizeof(magic_number));    // read values from file
+        
+		file.read((char*)&magic_number,sizeof(magic_number));    // read values from file
         magic_number = reverseInt(magic_number);
         file.read((char*)&number_of_images,sizeof(number_of_images));
         number_of_images = reverseInt(number_of_images);
@@ -83,10 +83,7 @@ int main(int argc, char** argv){
         file.read((char*)&n_cols,sizeof(n_cols));
         n_cols = reverseInt(n_cols);
         
-        d = n_rows * n_cols;						           // dimension
-        hTableSize = number_of_images / NForTable;
-
-        for(int i = 0; i < number_of_images; i++){             // read image
+		for(int i = 0; i < number_of_images; i++){             // read image
             for(int r = 0; r < n_rows; r++){
                 for(int c = 0; c < n_cols; c++){
                     unsigned char temp = 0;
@@ -98,7 +95,10 @@ int main(int argc, char** argv){
             pVec.push_back(tempVec);                           // save vector of pixels for every image
             tempVec.erase(tempVec.begin(), tempVec.end());
         }
-
+		
+		d = n_rows * n_cols;						           // dimension
+        hTableSize = number_of_images / NForTable;
+        
         vector < vector< vector <hTableNode> > > lHashTables;       // vector with L hash tables
         vector< vector <hTableNode> > hashTable;       // hash table
 
@@ -134,8 +134,6 @@ int main(int argc, char** argv){
 			lHashTables.push_back(hashTable);
 			hashTable.erase(hashTable.begin(), hashTable.end());
 		}
-
-
 
 
 		ifstream qfile (qFile);
@@ -175,7 +173,6 @@ int main(int argc, char** argv){
 					g = calculate_g(tempIntVec, k);                  // calculate g for every image
 					pos = g % hTableSize;                         // find the position to insert the image in the hash table
 					
-					vector<unsigned int> dist;
 					// approximate_nearest_neighbor(qVec[i], lHashTables, L, pos, d, N, ofile);
 					
 					// actual_nearest_neighbor(qVec[i], pVec, d, ofile);
