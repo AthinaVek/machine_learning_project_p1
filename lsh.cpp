@@ -67,7 +67,7 @@ int main(int argc, char** argv){
 		L = 5;
 		N = 7;
 		R = 10000;
-		w = 10 * R;
+		w = 8 * R;
 	}
 	
 	ifstream file (iFile);
@@ -138,58 +138,58 @@ int main(int argc, char** argv){
 
 
 
-		// ifstream qfile (qFile);
-	 //    if (qfile.is_open()){
-		// 	qfile.read((char*)&magic_number,sizeof(magic_number));    // read values from file
-	 //        magic_number = reverseInt(magic_number);
-	 //        qfile.read((char*)&number_of_images,sizeof(number_of_images));
-	 //        number_of_images = reverseInt(number_of_images);
-	 //        qfile.read((char*)&n_rows,sizeof(n_rows));
-	 //        n_rows = reverseInt(n_rows);
-	 //        qfile.read((char*)&n_cols,sizeof(n_cols));
-	 //        n_cols = reverseInt(n_cols);
+		ifstream qfile (qFile);
+	    if (qfile.is_open()){
+			qfile.read((char*)&magic_number,sizeof(magic_number));    // read values from file
+	        magic_number = reverseInt(magic_number);
+	        qfile.read((char*)&number_of_images,sizeof(number_of_images));
+	        number_of_images = reverseInt(number_of_images);
+	        qfile.read((char*)&n_rows,sizeof(n_rows));
+	        n_rows = reverseInt(n_rows);
+	        qfile.read((char*)&n_cols,sizeof(n_cols));
+	        n_cols = reverseInt(n_cols);
 	        
-	 //        for(int i = 0; i < number_of_images; i++){             // read image
-	 //            for(int r = 0; r < n_rows; r++){
-	 //                for(int c = 0; c < n_cols; c++){
-	 //                    unsigned char temp = 0;
-	 //                    qfile.read((char*)&temp,sizeof(temp));
+	        for(int i = 0; i < number_of_images; i++){             // read image
+	            for(int r = 0; r < n_rows; r++){
+	                for(int c = 0; c < n_cols; c++){
+	                    unsigned char temp = 0;
+	                    qfile.read((char*)&temp,sizeof(temp));
 
-	 //                    tempVec.push_back(temp);
-	 //                }
-	 //            }
-	 //            qVec.push_back(tempVec);                           // save vector of pixels for every image
-	 //            tempVec.erase(tempVec.begin(), tempVec.end());
-	 //        }
+	                    tempVec.push_back(temp);
+	                }
+	            }
+	            qVec.push_back(tempVec);                           // save vector of pixels for every image
+	            tempVec.erase(tempVec.begin(), tempVec.end());
+	        }
 
-	 //    	ofstream ofile (oFile);
-		// 	if (ofile.is_open()){
-		// 		for(int i = 0; i < 20; i++){
+	    	ofstream ofile (oFile);
+			if (ofile.is_open()){
+				for(int i = 0; i < 20; i++){
 					
-		// 			for (int j = 0; j < k; j++){
-		// 				aVec = calculate_a(qVec[i], sVec[j], w, d);  // calculate a for every image
-		// 				h = calculate_h(aVec, m, M, d);              // calculate h for every image
-		// 				tempIntVec.push_back(h);
-		// 			}
+					for (int j = 0; j < k; j++){
+						aVec = calculate_a(qVec[i], sVec[j], w, d);  // calculate a for every image
+						h = calculate_h(aVec, m, M, d);              // calculate h for every image
+						tempIntVec.push_back(h);
+					}
 					
-		// 			g = calculate_g(tempIntVec, k);                  // calculate g for every image
-		// 			pos = g % hTableSize;                         // find the position to insert the image in the hash table
+					g = calculate_g(tempIntVec, k);                  // calculate g for every image
+					pos = g % hTableSize;                         // find the position to insert the image in the hash table
 					
-		// 			vector<unsigned int> dist;
-		// 			// approximate_nearest_neighbor(qVec[i], lHashTables, L, pos, d, N, ofile);
+					vector<unsigned int> dist;
+					// approximate_nearest_neighbor(qVec[i], lHashTables, L, pos, d, N, ofile);
 					
-		// 			// dist = actual_nearest_neighbor(qVec[i], pVec, d);
+					// actual_nearest_neighbor(qVec[i], pVec, d, ofile);
 
-		// 			approximate_range_search( qVec[i], lHashTables, L, pos, d, R, ofile);
+					approximate_range_search( qVec[i], lHashTables, L, pos, d, R, ofile);
 					
-		// 		}
-		// 	}
+				}
+			}
 
 
-		// }
-		// else{
-		// 	cout << "Could not open query file." << endl;
-		// }
+		}
+		else{
+			cout << "Could not open query file." << endl;
+		}
     }
     else {
     	cout << "Could not open input file." << endl;
