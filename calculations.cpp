@@ -84,23 +84,28 @@ unsigned int manhattan_dist(vector<unsigned char> qVec, vector<unsigned char> pV
 }
 
 
-void approximate_nearest_neighbor(vector<unsigned char> qVec, vector < vector< vector <vector<unsigned char> > > > lHashTables, int L, int pos, int d, int N, ofstream &ofile){
+void approximate_nearest_neighbor(vector<unsigned char> qVec, vector < vector< vector <hTableNode> > > lHashTables, int L, int pos, int d, int N, ofstream &ofile){
 	unsigned int temp;
-	vector<unsigned int> distances;
+	distanceNode node;
+	vector<distanceNode> distances;
 	
+
 	for(int i = 0; i < N; i++){
-		distances.push_back(4294967295);							//highest possible unsigned int
+		node.pPos = -1;
+		node.dist = 4294967295;
+		distances.push_back(node);							//highest possible unsigned int
 	}
 	
 	for(int i = 0; i < L; i++){
 
 		for(int j = 0; j < lHashTables[i][pos].size(); j++){
-			temp = manhattan_dist(qVec, lHashTables[i][pos][j], d);
-			if(temp < distances[N-1]){
+			temp = manhattan_dist(qVec, lHashTables[i][pos][j].pVec, d);
+			if(temp < distances[N-1].dist){
 				
-				distances[N-1] = temp;
+				distances[N-1].dist = temp;
+				distances[N-1].pPos = lHashTables[i][pos][j].pPos;
 				for(int c=N-2; c>=0; c--){
-					if(distances[c] > distances[c+1]){
+					if(distances[c].dist > distances[c+1].dist){
 						iter_swap(distances.begin() + c, distances.begin() + c+1);
 					}
 					else{
@@ -116,58 +121,58 @@ void approximate_nearest_neighbor(vector<unsigned char> qVec, vector < vector< v
 	}
 	else{
 		for(int c=0; c<N-1; c++){
-			ofile << distances[c] << ", ";
+			ofile << distances[c].pPos << "    val: " << distances[c].dist << ", ";
 		}
-		ofile << distances[N-1] << endl;
+		ofile  << distances[N-1].pPos << "    val: " << distances[N-1].dist << endl;
 	}
  }
 
 
-unsigned int actual_nearest_neighbor(vector<unsigned char>  qVec, vector< vector< unsigned char> > pVec, int d){
-	unsigned int dist = 4294967295, temp;							//highest possible unsigned int
+// unsigned int actual_nearest_neighbor(vector<unsigned char>  qVec, vector< vector< unsigned char> > pVec, int d){
+// 	unsigned int dist = 4294967295, temp;							//highest possible unsigned int
 			
-	for( int j = 0; j < pVec.size(); j++){
+// 	for( int j = 0; j < pVec.size(); j++){
 		
-		temp = manhattan_dist(qVec, pVec[j], d);
-		if(temp < dist){
-			dist = temp;
+// 		temp = manhattan_dist(qVec, pVec[j], d);
+// 		if(temp < dist){
+// 			dist = temp;
 			
-			//number of neighbor
-		}
-	}
-	return dist;
-}
+// 			//number of neighbor
+// 		}
+// 	}
+// 	return dist;
+// }
 
 
 
-void approximate_range_search(vector<unsigned char> qVec, vector < vector< vector <vector<unsigned char> > > > lHashTables, int L, int pos, int d, double R, ofstream &ofile){
-	unsigned int temp;
-	int c;
-	vector<unsigned int> distances;
+// void approximate_range_search(vector<unsigned char> qVec, vector < vector< vector <vector<unsigned char> > > > lHashTables, int L, int pos, int d, double R, ofstream &ofile){
+// 	unsigned int temp;
+// 	int c;
+// 	vector<unsigned int> distances;
 	
-	for(int i = 0; i < L; i++){
+// 	for(int i = 0; i < L; i++){
 
-		for(int j = 0; j < lHashTables[i][pos].size(); j++){
-			temp = manhattan_dist(qVec, lHashTables[i][pos][j], d);
-			// cout << lHashTables[i][pos].size() << "    " << j << endl;
-			if(temp < R){
-				distances.push_back(temp);
-			}
-		}
-	}
+// 		for(int j = 0; j < lHashTables[i][pos].size(); j++){
+// 			temp = manhattan_dist(qVec, lHashTables[i][pos][j], d);
+// 			// cout << lHashTables[i][pos].size() << "    " << j << endl;
+// 			if(temp < R){
+// 				distances.push_back(temp);
+// 			}
+// 		}
+// 	}
 
-	if (distances.size() == 0){
-		ofile << "No neighbors in this range." << endl << endl;
-	}
-	else{
-		for(c=0; c<distances.size()-1; c++){
-			// cout << distances.size()-1 << "    " << c << endl;
-			ofile << distances[c] << ", ";
-		}
+// 	if (distances.size() == 0){
+// 		ofile << "No neighbors in this range." << endl << endl;
+// 	}
+// 	else{
+// 		for(c=0; c<distances.size()-1; c++){
+// 			// cout << distances.size()-1 << "    " << c << endl;
+// 			ofile << distances[c] << ", ";
+// 		}
 
-		ofile << distances[c] << endl << endl;
-	}
- }
+// 		ofile << distances[c] << endl << endl;
+// 	}
+//  }
 
 
 

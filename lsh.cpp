@@ -29,6 +29,8 @@ int main(int argc, char** argv){
 	vector< vector<int> > hVec;
 	vector<int> tempIntVec;
 	vector< vector<unsigned char> > qVec;
+
+	hTableNode node;
 	
 	if(argc == 15){                                          // Read input
 		for (int i = 1; i < 15; ++i){
@@ -97,12 +99,12 @@ int main(int argc, char** argv){
             tempVec.erase(tempVec.begin(), tempVec.end());
         }
 
-        vector < vector< vector <vector<unsigned char> > > > lHashTables;       // vector with L hash tables
-        vector< vector <vector<unsigned char> > > hashTable;       // hash table
+        vector < vector< vector <hTableNode> > > lHashTables;       // vector with L hash tables
+        vector< vector <hTableNode> > hashTable;       // hash table
 
 		for (int l=0; l<L; l++){
 	        for(int y=0; y<hTableSize; y++){
-			    hashTable.push_back(vector<vector<unsigned char> >()); //initialize the first index with a 2D vector
+			    hashTable.push_back(vector<hTableNode>()); //initialize the first index with a 2D vector
 			}
 
 	        for (int i=0; i<k; i++){
@@ -122,7 +124,11 @@ int main(int argc, char** argv){
 	        	
 	        	g = calculate_g(hVec[i], k);                  // calculate g for every image
 	        	pos = g % hTableSize;                         // find the position to insert the image in the hash table
-	        	hashTable[pos].push_back(pVec[i]);            // insert image in the hash table
+
+	        	node.pPos = i;
+	        	node.g = g;
+	        	node.pVec = pVec[i];
+	        	hashTable[pos].push_back(node);            // insert image in the hash table
 			}
 
 			lHashTables.push_back(hashTable);
@@ -132,58 +138,58 @@ int main(int argc, char** argv){
 
 
 
-		ifstream qfile (qFile);
-	    if (qfile.is_open()){
-			qfile.read((char*)&magic_number,sizeof(magic_number));    // read values from file
-	        magic_number = reverseInt(magic_number);
-	        qfile.read((char*)&number_of_images,sizeof(number_of_images));
-	        number_of_images = reverseInt(number_of_images);
-	        qfile.read((char*)&n_rows,sizeof(n_rows));
-	        n_rows = reverseInt(n_rows);
-	        qfile.read((char*)&n_cols,sizeof(n_cols));
-	        n_cols = reverseInt(n_cols);
+		// ifstream qfile (qFile);
+	 //    if (qfile.is_open()){
+		// 	qfile.read((char*)&magic_number,sizeof(magic_number));    // read values from file
+	 //        magic_number = reverseInt(magic_number);
+	 //        qfile.read((char*)&number_of_images,sizeof(number_of_images));
+	 //        number_of_images = reverseInt(number_of_images);
+	 //        qfile.read((char*)&n_rows,sizeof(n_rows));
+	 //        n_rows = reverseInt(n_rows);
+	 //        qfile.read((char*)&n_cols,sizeof(n_cols));
+	 //        n_cols = reverseInt(n_cols);
 	        
-	        for(int i = 0; i < number_of_images; i++){             // read image
-	            for(int r = 0; r < n_rows; r++){
-	                for(int c = 0; c < n_cols; c++){
-	                    unsigned char temp = 0;
-	                    qfile.read((char*)&temp,sizeof(temp));
+	 //        for(int i = 0; i < number_of_images; i++){             // read image
+	 //            for(int r = 0; r < n_rows; r++){
+	 //                for(int c = 0; c < n_cols; c++){
+	 //                    unsigned char temp = 0;
+	 //                    qfile.read((char*)&temp,sizeof(temp));
 
-	                    tempVec.push_back(temp);
-	                }
-	            }
-	            qVec.push_back(tempVec);                           // save vector of pixels for every image
-	            tempVec.erase(tempVec.begin(), tempVec.end());
-	        }
+	 //                    tempVec.push_back(temp);
+	 //                }
+	 //            }
+	 //            qVec.push_back(tempVec);                           // save vector of pixels for every image
+	 //            tempVec.erase(tempVec.begin(), tempVec.end());
+	 //        }
 
-	    	ofstream ofile (oFile);
-			if (ofile.is_open()){
-				for(int i = 0; i < 20; i++){
+	 //    	ofstream ofile (oFile);
+		// 	if (ofile.is_open()){
+		// 		for(int i = 0; i < 20; i++){
 					
-					for (int j = 0; j < k; j++){
-						aVec = calculate_a(qVec[i], sVec[j], w, d);  // calculate a for every image
-						h = calculate_h(aVec, m, M, d);              // calculate h for every image
-						tempIntVec.push_back(h);
-					}
+		// 			for (int j = 0; j < k; j++){
+		// 				aVec = calculate_a(qVec[i], sVec[j], w, d);  // calculate a for every image
+		// 				h = calculate_h(aVec, m, M, d);              // calculate h for every image
+		// 				tempIntVec.push_back(h);
+		// 			}
 					
-					g = calculate_g(tempIntVec, k);                  // calculate g for every image
-					pos = g % hTableSize;                         // find the position to insert the image in the hash table
+		// 			g = calculate_g(tempIntVec, k);                  // calculate g for every image
+		// 			pos = g % hTableSize;                         // find the position to insert the image in the hash table
 					
-					vector<unsigned int> dist;
-					// approximate_nearest_neighbor(qVec[i], lHashTables, L, pos, d, N, ofile);
+		// 			vector<unsigned int> dist;
+		// 			// approximate_nearest_neighbor(qVec[i], lHashTables, L, pos, d, N, ofile);
 					
-					// dist = actual_nearest_neighbor(qVec[i], pVec, d);
+		// 			// dist = actual_nearest_neighbor(qVec[i], pVec, d);
 
-					approximate_range_search( qVec[i], lHashTables, L, pos, d, R, ofile);
+		// 			approximate_range_search( qVec[i], lHashTables, L, pos, d, R, ofile);
 					
-				}
-			}
+		// 		}
+		// 	}
 
 
-		}
-		else{
-			cout << "Could not open query file." << endl;
-		}
+		// }
+		// else{
+		// 	cout << "Could not open query file." << endl;
+		// }
     }
     else {
     	cout << "Could not open input file." << endl;
