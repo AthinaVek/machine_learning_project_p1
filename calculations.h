@@ -21,7 +21,7 @@ int calculate_h(vector<int> aVec, int m, int M, int d);
 unsigned int calculate_g(vector<int> hVec, int k);
 unsigned int manhattan_dist(vector<unsigned char> qVec, vector<unsigned char> pVec, int d);
 
-unsigned int approximate_nearest_neighbor(vector<unsigned char> qVec, vector < vector< vector <vector<unsigned char> > > > lHashTables, int L, int pos, int d, int N);
+void approximate_nearest_neighbor(vector<unsigned char> qVec, vector < vector< vector <vector<unsigned char> > > > lHashTables, int L, int pos, int d, int N);
 unsigned int actual_nearest_neighbor(vector<unsigned char>  qVec, vector< vector< unsigned char> > pVec, int d);
 
 #endif

@@ -18,7 +18,7 @@ int main(int argc, char** argv){
 	int magic_number=0, number_of_images=0;
     int n_rows=0, n_cols=0;
     int d, M, h, pos;
-    unsigned int g, dist;
+    unsigned int g;
     int hTableSize;
     int image_number_in_query_set, image_number_in_data_set;
 
@@ -56,10 +56,11 @@ int main(int argc, char** argv){
 		}
 	}
 	else{
-		cout << "No input given. Using default values." << endl << endl;
+		cout << "No right input given. Using default values." << endl << endl;
 
 		iFile = "train-images-idx3-ubyte";                   //default values if not given by user
 		qFile = "t10k-images-idx3-ubyte";
+		oFile = "lsh_results.txt";
 		k = 4;				
 		L = 5;
 		N = 1;
@@ -88,10 +89,6 @@ int main(int argc, char** argv){
                 for(int c = 0; c < n_cols; c++){
                     unsigned char temp = 0;
                     file.read((char*)&temp,sizeof(temp));
-
-                    // int z;
-                    // z = (int)temp;
-                    // cout << z << endl;
 
                     tempVec.push_back(temp);
                 }
@@ -127,10 +124,6 @@ int main(int argc, char** argv){
 	        	pos = g % hTableSize;                         // find the position to insert the image in the hash table
 	        	hashTable[pos].push_back(pVec[i]);            // insert image in the hash table
 			}
-		
-			// for (int i=0; i<hTableSize; i++){
-			// 	cout << l << "lllll" << i << "------" << hashTable[i].size() << endl;
-			// }
 
 			lHashTables.push_back(hashTable);
 			hashTable.erase(hashTable.begin(), hashTable.end());
@@ -162,23 +155,26 @@ int main(int argc, char** argv){
 	            qVec.push_back(tempVec);                           // save vector of pixels for every image
 	            tempVec.erase(tempVec.begin(), tempVec.end());
 	        }
+
+	    	
 		
-		for(int i = 0; i < 20; i++){
-			
-			for (int j = 0; j < k; j++){
-				aVec = calculate_a(qVec[i], sVec[j], w, d);  // calculate a for every image
-				h = calculate_h(aVec, m, M, d);              // calculate h for every image
-				tempIntVec.push_back(h);
+			for(int i = 0; i < 20; i++){
+				
+				for (int j = 0; j < k; j++){
+					aVec = calculate_a(qVec[i], sVec[j], w, d);  // calculate a for every image
+					h = calculate_h(aVec, m, M, d);              // calculate h for every image
+					tempIntVec.push_back(h);
+				}
+				
+				g = calculate_g(tempIntVec, k);                  // calculate g for every image
+				pos = g % hTableSize;                         // find the position to insert the image in the hash table
+				
+				vector<unsigned int> dist;
+				approximate_nearest_neighbor(qVec[i], lHashTables, L, pos, d, N);
+				
+				// dist = actual_nearest_neighbor(qVec[i], pVec, d);
+				
 			}
-			
-			g = calculate_g(tempIntVec, k);                  // calculate g for every image
-			pos = g % hTableSize;                         // find the position to insert the image in the hash table
-			
-			dist = approximate_nearest_neighbor(qVec[i], lHashTables, L, pos, d, N);
-			
-			dist = actual_nearest_neighbor(qVec[i], pVec, d);
-			
-		}
 
 
 
