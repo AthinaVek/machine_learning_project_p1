@@ -23,5 +23,6 @@ unsigned int manhattan_dist(vector<unsigned char> qVec, vector<unsigned char> pV
 
 void approximate_nearest_neighbor(vector<unsigned char> qVec, vector < vector< vector <vector<unsigned char> > > > lHashTables, int L, int pos, int d, int N, ofstream &ofile);
 unsigned int actual_nearest_neighbor(vector<unsigned char>  qVec, vector< vector< unsigned char> > pVec, int d);
+void approximate_range_search(vector<unsigned char> qVec, vector < vector< vector <vector<unsigned char> > > > lHashTables, int L, int pos, int d, double R, ofstream &ofile);
 
 #endif

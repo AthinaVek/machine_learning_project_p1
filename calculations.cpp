@@ -36,7 +36,7 @@ int calculate_h(vector<int> aVec, int m, int M, int d){
 	j = d-1;
 
 	for(int i = 0; i < d; i++){									//modulo
-		x = ((aVec[j]%M) * (m^i)%M) % M;						//pow(m,i)
+		x = ((aVec[j]%M) * (int)pow(m,i)%M) % M;						//pow(m,i)
 
 		h += x % M;
 		j--;
@@ -71,7 +71,6 @@ unsigned int calculate_g(vector<int> hVec, int k){
 	// cout << "g(int) is: " << g << endl;
 
 	return g;
-	
 }
 
 unsigned int manhattan_dist(vector<unsigned char> qVec, vector<unsigned char> pVec, int d){
@@ -81,10 +80,9 @@ unsigned int manhattan_dist(vector<unsigned char> qVec, vector<unsigned char> pV
 	for(int i = 0; i < d; i++){
 		dist+= abs(qVec[i] - pVec[i]);
 	}
-	
 	return dist;
-	
 }
+
 
 void approximate_nearest_neighbor(vector<unsigned char> qVec, vector < vector< vector <vector<unsigned char> > > > lHashTables, int L, int pos, int d, int N, ofstream &ofile){
 	unsigned int temp;
@@ -113,31 +111,63 @@ void approximate_nearest_neighbor(vector<unsigned char> qVec, vector < vector< v
 			}
 		}
 	}
-	for(int c=0; c<N-1; c++){
-		ofile << distances[c] << ", ";
+	if (distances.size() == 0){
+		ofile << "No neighbors." << endl << endl;
 	}
-	ofile << distances[N-1] << endl;
+	else{
+		for(int c=0; c<N-1; c++){
+			ofile << distances[c] << ", ";
+		}
+		ofile << distances[N-1] << endl;
+	}
  }
 
+
 unsigned int actual_nearest_neighbor(vector<unsigned char>  qVec, vector< vector< unsigned char> > pVec, int d){
-	
 	unsigned int dist = 4294967295, temp;							//highest possible unsigned int
 			
 	for( int j = 0; j < pVec.size(); j++){
 		
 		temp = manhattan_dist(qVec, pVec[j], d);
-		
 		if(temp < dist){
 			dist = temp;
 			
 			//number of neighbor
 		}
-		
 	}
-	
 	return dist;
-	
 }
+
+
+
+void approximate_range_search(vector<unsigned char> qVec, vector < vector< vector <vector<unsigned char> > > > lHashTables, int L, int pos, int d, double R, ofstream &ofile){
+	unsigned int temp;
+	int c;
+	vector<unsigned int> distances;
+	
+	for(int i = 0; i < L; i++){
+
+		for(int j = 0; j < lHashTables[i][pos].size(); j++){
+			temp = manhattan_dist(qVec, lHashTables[i][pos][j], d);
+			// cout << lHashTables[i][pos].size() << "    " << j << endl;
+			if(temp < R){
+				distances.push_back(temp);
+			}
+		}
+	}
+
+	if (distances.size() == 0){
+		ofile << "No neighbors in this range." << endl << endl;
+	}
+	else{
+		for(c=0; c<distances.size()-1; c++){
+			// cout << distances.size()-1 << "    " << c << endl;
+			ofile << distances[c] << ", ";
+		}
+
+		ofile << distances[c] << endl << endl;
+	}
+ }
 
 
 

@@ -170,9 +170,11 @@ int main(int argc, char** argv){
 					pos = g % hTableSize;                         // find the position to insert the image in the hash table
 					
 					vector<unsigned int> dist;
-					approximate_nearest_neighbor(qVec[i], lHashTables, L, pos, d, N, ofile);
+					// approximate_nearest_neighbor(qVec[i], lHashTables, L, pos, d, N, ofile);
 					
 					// dist = actual_nearest_neighbor(qVec[i], pVec, d);
+
+					approximate_range_search( qVec[i], lHashTables, L, pos, d, R, ofile);
 					
 				}
 			}
