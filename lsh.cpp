@@ -38,28 +38,8 @@ int main(int argc, char** argv){
 	ifstream file (iFile);
     if (file.is_open()){
         
-		file.read((char*)&magic_number,sizeof(magic_number));    // read values from file
-        magic_number = reverseInt(magic_number);
-        file.read((char*)&number_of_images,sizeof(number_of_images));
-        number_of_images = reverseInt(number_of_images);
-        file.read((char*)&n_rows,sizeof(n_rows));
-        n_rows = reverseInt(n_rows);
-        file.read((char*)&n_cols,sizeof(n_cols));
-        n_cols = reverseInt(n_cols);
-        
-		for(int i = 0; i < number_of_images; i++){             // read image
-            for(int r = 0; r < n_rows; r++){
-                for(int c = 0; c < n_cols; c++){
-                    unsigned char temp = 0;
-                    file.read((char*)&temp,sizeof(temp));
-
-                    tempVec.push_back(temp);
-                }
-            }
-            pVec.push_back(tempVec);                           // save vector of pixels for every image
-            tempVec.erase(tempVec.begin(), tempVec.end());
-        }
-		
+        read_data(file, &magic_number, &number_of_images, &n_rows, &n_cols, pVec, tempVec);
+			
 		d = n_rows * n_cols;						           // dimension
         hTableSize = number_of_images / NForTable;
         
@@ -98,31 +78,12 @@ int main(int argc, char** argv){
 			lHashTables.push_back(hashTable);
 			hashTable.erase(hashTable.begin(), hashTable.end());
 		}
-
+		
 
 		ifstream qfile (qFile);
 	    if (qfile.is_open()){
-			qfile.read((char*)&magic_number,sizeof(magic_number));    // read values from file
-	        magic_number = reverseInt(magic_number);
-	        qfile.read((char*)&number_of_images,sizeof(number_of_images));
-	        number_of_images = reverseInt(number_of_images);
-	        qfile.read((char*)&n_rows,sizeof(n_rows));
-	        n_rows = reverseInt(n_rows);
-	        qfile.read((char*)&n_cols,sizeof(n_cols));
-	        n_cols = reverseInt(n_cols);
 	        
-	        for(int i = 0; i < number_of_images; i++){             // read image
-	            for(int r = 0; r < n_rows; r++){
-	                for(int c = 0; c < n_cols; c++){
-	                    unsigned char temp = 0;
-	                    qfile.read((char*)&temp,sizeof(temp));
-
-	                    tempVec.push_back(temp);
-	                }
-	            }
-	            qVec.push_back(tempVec);                           // save vector of pixels for every image
-	            tempVec.erase(tempVec.begin(), tempVec.end());
-	        }
+	        read_data(qfile, &magic_number, &number_of_images, &n_rows, &n_cols, qVec, tempVec);
 
 	    	ofstream ofile (oFile);
 			if (ofile.is_open()){

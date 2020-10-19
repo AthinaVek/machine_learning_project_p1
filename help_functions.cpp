@@ -53,13 +53,37 @@ void read_input(int* argc, char** argv, string* iFile, string* qFile, int* k, in
 		*L = 5;
 		*N = 7;
 		*R = 10000;
-		
 	}
 	
 	*w = 8 * (*R);
 	
 }
 
+void read_data(ifstream &file, int* magic_number, int* number_of_images, int* n_rows, int* n_cols, vector< vector<unsigned char> >& vec, vector<unsigned char>& tempVec){
+	
+	file.read((char*)magic_number,sizeof(*magic_number));    // read values from file
+	*magic_number = reverseInt(*magic_number);
+	file.read((char*)number_of_images,sizeof(*number_of_images));
+	*number_of_images = reverseInt(*number_of_images);
+	file.read((char*)n_rows,sizeof(*n_rows));
+	*n_rows = reverseInt(*n_rows);
+	file.read((char*)n_cols,sizeof(*n_cols));
+	*n_cols = reverseInt(*n_cols);
+	
+	for(int i = 0; i < *number_of_images; i++){             // read image
+		for(int r = 0; r < *n_rows; r++){
+			for(int c = 0; c < *n_cols; c++){
+				unsigned char temp = 0;
+				file.read((char*)&temp,sizeof(temp));
+
+				tempVec.push_back(temp);
+			}
+		}
+		vec.push_back(tempVec);                           // save vector of pixels for every image
+		tempVec.erase(tempVec.begin(), tempVec.end());
+	}
+	
+}
 
 
 // void printNestedList(list<list<unsigned char> > nested_list) 
