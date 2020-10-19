@@ -31,43 +31,7 @@ int main(int argc, char** argv){
 
 	hTableNode node;
 	
-	if(argc == 15){                                          // Read input
-		for (int i = 1; i < 15; ++i){
-			if (string(argv[i]) == "-d"){
-				iFile = argv[i+1];
-			}
-			else if (string(argv[i]) == "-q"){
-				qFile = argv[i+1];
-			}
-			else if (string(argv[i]) == "-k"){
-				k = atoi(argv[i+1]);
-			}
-			else if (string(argv[i]) == "-L"){
-				L = atoi(argv[i+1]);
-			}
-			else if (string(argv[i]) == "-o"){
-				oFile = argv[i+1];
-			}
-			else if (string(argv[i]) == "-N"){
-				N = atoi(argv[i+1]);
-			}
-			else if (string(argv[i]) == "-R"){
-				R = atof(argv[i+1]);
-			}
-		}
-	}
-	else{
-		cout << "No right input given. Using default values." << endl << endl;
-
-		iFile = "train-images-idx3-ubyte";                   //default values if not given by user
-		qFile = "t10k-images-idx3-ubyte";
-		oFile = "lsh_results.txt";
-		k = 4;				
-		L = 5;
-		N = 7;
-		R = 10000;
-		w = 8 * R;
-	}
+	read_input(&argc, argv, &iFile, &qFile, &k, &L, &oFile, &N, &R, &w);
 	
 	M = pow(2,(32/k));
 	

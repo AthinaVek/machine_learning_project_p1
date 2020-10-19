@@ -17,6 +17,8 @@ using namespace std;
 
 int reverseInt (int i);
 
+void read_input(int* argc, char** argv, string* iFile, string* qFile, int* k, int* L, string* oFile, int* N, double* R, double* w);
+
 // void printNestedList(list<list<unsigned char> > nested_list);
 
 
