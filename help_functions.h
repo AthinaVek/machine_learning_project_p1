@@ -11,6 +11,8 @@
 #include <random>
 #include <vector>
 #include <cmath>
+#include <algorithm>
+#include <chrono>
 
 
 using namespace std;

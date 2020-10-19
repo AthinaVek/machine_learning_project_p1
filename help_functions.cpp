@@ -51,7 +51,7 @@ void read_input(int* argc, char** argv, string* iFile, string* qFile, int* k, in
 		
 		*k = 4;				
 		*L = 5;
-		*N = 7;
+		*N = 1;
 		*R = 10000;
 	}
 	
