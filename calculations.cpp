@@ -9,7 +9,7 @@ vector<int> get_s(double w, int d){
     
     random_device rand_dev;
     mt19937 generator(rand_dev());
-    uniform_int_distribution<int> distr(range_from, range_to);
+    uniform_int_distribution<> distr(range_from, range_to);
  
     for (int i = 0; i < d; ++i){
         sVec.push_back(distr(generator));
@@ -22,24 +22,45 @@ vector<int> calculate_a(vector<unsigned char> pVec, vector<int> sVec, double w, 
 	vector<int> aVec;
 	
 	for(int i = 0; i < d; i++){
-		aVec.push_back(floor((pVec[i]+w - sVec[i])/w));
+		//~ cout << "aVec[" << i << "] = " << floor((pVec[i] - sVec[i])/w) << endl;
+		aVec.push_back(floor((pVec[i] - sVec[i])/w));
 	}
+	
 	return aVec;
 }
 
+int modular_pow(int base, int exponent, int modulus){
+    if(modulus == 1){									//check if useless
+        return 0;
+    }
+    
+    int c = 1;
+    
+    for(int e_prime = 0; e_prime < exponent; e_prime++){
+        c = (c * base) % modulus;
+    }
+    
+    return c;
+}
 
 int calculate_h(vector<int> aVec, int m, int M, int d){
 	int h = 0, j, x;
 	j = d-1;
 
 	for(int i = 0; i < d; i++){									//modulo
-		x = ((aVec[j]%M) * (int)pow(m,i)%M) % M;						//pow(m,i)
-
+		x = ((aVec[j]%M) * modular_pow(m, i, M)) % M;
+		//cout << "pow(m,i)%M = " << (int)pow(m,i) << " Modular exponentiation = " << modular_pow(m, i, M) << endl;
+		//cout << "x = " << x << endl;
+		if(x < 0)
+			x += M;
+		//cout << "x after = " << x << endl;
 		h += x % M;
 		j--;
 	}
+	//cout << endl << "==============================" << endl << endl;
 	h = h % M;
 	
+	//cout << endl << endl << "==============================" << endl << endl << "h = " << h << endl << endl << "=============================="<< endl << endl << endl;
 	return h;
 }
 

@@ -1,8 +1,8 @@
 #include "help_functions.h"
 #include "calculations.h"
 
-#define m 536870912    // 2^29
-#define NForTable 8
+#define m 107					//a_max < m < M/2
+#define NForTable 16
 
 using namespace std;
 
@@ -30,7 +30,7 @@ int main(int argc, char** argv){
 	
 	read_input(&argc, argv, &iFile, &qFile, &k, &L, &oFile, &N, &R, &w);
 	
-	M = pow(2,(32/k));
+	M = pow(2,floor(32/k));
 	
 	ifstream file (iFile);
     if (file.is_open()){
@@ -64,15 +64,18 @@ int main(int argc, char** argv){
 	        	
 	        	g = calculate_g(hVec[i], k);                  // calculate g for every image
 	        	pos = g % hTableSize;                         // find the position to insert the image in the hash table
+	        	
+	        	//cout << "pos = " << pos << endl;
 
 	        	node.pPos = i;
 	        	node.g = g;
 	        	node.pVec = pVec[i];
 	        	hashTable[pos].push_back(node);            // insert image in the hash table
 			}
-
+			
 			lHashTables.push_back(hashTable);
 			hashTable.erase(hashTable.begin(), hashTable.end());
+			//check if sVec, hVec need to be erased
 		}
 		
 
@@ -82,7 +85,7 @@ int main(int argc, char** argv){
 
 	    	ofstream ofile (oFile);
 			if (ofile.is_open()){
-				for(int i = 0; i < 100; i++){
+				for(int i = 0; i < 10; i++){
 					
 					for (int j = 0; j < k; j++){
 						aVec = calculate_a(qVec[i], sVec[j], w, d);  // calculate a for every image
