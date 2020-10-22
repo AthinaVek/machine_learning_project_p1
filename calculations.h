@@ -49,4 +49,7 @@ vector<distanceNode> approximate_nearest_neighbor(vector<unsigned char> qVec, ve
 vector<distanceNode> actual_nearest_neighbor(vector<unsigned char>  qVec, vector< vector< unsigned char> > pVec, int d, int N, ofstream &ofile);
 vector<distanceNode> approximate_range_search(vector<unsigned char> qVec, vector < vector< vector <hTableNode> > > lHashTables, int L, int pos, int d, double R, ofstream &ofile);
 
+unsigned int calculate_p(vector<fNode> fVec, int k);
+
+
 #endif

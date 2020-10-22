@@ -14,7 +14,7 @@ int main(int argc, char** argv){
 	int magic_number=0, number_of_images=0;
     int n_rows=0, n_cols=0;
     int d, M, h, pos;
-    unsigned int g;
+    unsigned int g, p;
     int hTableSize;
     bool exists, first=1;
 
@@ -91,13 +91,17 @@ int main(int argc, char** argv){
 					fnode.f = rand() % 2 + 0;
 				}
 				tempfVec.push_back(fnode);
+				// cout << fnode.f << endl;
 			}
 			first = 0;
 
 			fVec.push_back(tempfVec);                      // save f*k distinct of every image
         	tempfVec.erase(tempfVec.begin(), tempfVec.end());
         	
+        	p = calculate_p(fVec[i], k);
 
+        	// bitset<32> x(p);
+        	// cout << "p:  " << x << endl << endl;
 
 
         	///////////////////////////////////////////////////////////////////
@@ -106,8 +110,6 @@ int main(int argc, char** argv){
 
         	
 
-        	// g = calculate_g(hVec[i], k);                  // calculate g for every image
-        	// pos = g % hTableSize;                         // find the position to insert the image in the hash table
         	
         	// //cout << "pos = " << pos << endl;
 

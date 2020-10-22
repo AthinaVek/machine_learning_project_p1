@@ -206,9 +206,16 @@ vector<distanceNode> approximate_range_search(vector<unsigned char> qVec, vector
 
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
 
+unsigned int calculate_p(vector<fNode> fVec, int k){
+	unsigned int p=0;
 
-
+	for (int i=0; i<k; i++){
+		p = fVec[i].f << (k-1-i) | p ;
+	}
+	return p;
+}
