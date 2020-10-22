@@ -15,7 +15,7 @@ int reverseInt (int i){
     return ((int)c1 << 24) + ((int)c2 << 16) + ((int)c3 << 8) + c4;
 }
 
-void read_input(int* argc, char** argv, string* iFile, string* qFile, int* k, int* L, string* oFile, int* N, double* R, double* w){
+void read_inputLSH(int* argc, char** argv, string* iFile, string* qFile, int* k, int* L, string* oFile, int* N, double* R, double* w){
 	
 	if(*argc == 15){                                          // Read input
 		for (int i = 1; i < 15; ++i){
@@ -55,7 +55,7 @@ void read_input(int* argc, char** argv, string* iFile, string* qFile, int* k, in
 		*R = 10000;
 	}
 	
-	*w = 8 * (*R);
+	*w = 4 * (*R);
 	
 }
 
@@ -85,6 +85,54 @@ void read_data(ifstream &file, int* magic_number, int* number_of_images, int* n_
 	
 }
 
+
+void read_inputCube(int* argc, char** argv, string* iFile, string* qFile, int* k, int* M, int* probes, string* oFile, int* N, double* R, double* w){
+	
+	if(*argc == 17){                                          // Read input
+		for (int i = 1; i < 17; ++i){
+			if (string(argv[i]) == "-d"){
+				*iFile = argv[i+1];
+			}
+			else if (string(argv[i]) == "-q"){
+				*qFile = argv[i+1];
+			}
+			else if (string(argv[i]) == "-k"){
+				*k = atoi(argv[i+1]);
+			}
+			else if (string(argv[i]) == "-M"){
+				*M = atoi(argv[i+1]);
+			}
+			else if (string(argv[i]) == "-probes"){
+				*probes = atoi(argv[i+1]);
+			}
+			else if (string(argv[i]) == "-o"){
+				*oFile = argv[i+1];
+			}
+			else if (string(argv[i]) == "-N"){
+				*N = atoi(argv[i+1]);
+			}
+			else if (string(argv[i]) == "-R"){
+				*R = atof(argv[i+1]);
+			}
+		}
+	}
+	else{
+		cout << "No right input given. Using default values." << endl << endl;
+
+		*iFile = "train-images-idx3-ubyte";                   //default values if not given by user
+		*qFile = "t10k-images-idx3-ubyte";
+		*oFile = "cube_results.txt";
+		
+		*k = 14;				
+		*M = 10;
+		*probes = 2;
+		*N = 1;
+		*R = 10000;
+	}
+	
+	*w = 4 * (*R);
+	
+}
 
 // void printNestedList(list<list<unsigned char> > nested_list) 
 // { 

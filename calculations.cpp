@@ -22,26 +22,27 @@ vector<int> calculate_a(vector<unsigned char> pVec, vector<int> sVec, double w, 
 	vector<int> aVec;
 	
 	for(int i = 0; i < d; i++){
-		//~ cout << "aVec[" << i << "] = " << floor((pVec[i] - sVec[i])/w) << endl;
-		aVec.push_back(floor((pVec[i] - sVec[i])/w));
+		aVec.push_back(floor((pVec[i]+w - sVec[i])/w));
 	}
-	
 	return aVec;
 }
 
-int modular_pow(int base, int exponent, int modulus){
-    if(modulus == 1){									//check if useless
-        return 0;
+
+int modular_pow(int base, int exponent, int modulator){
+    int result;
+
+    base = base % modulator;
+
+    while(exponent > 0){
+        if( (exponent%2) != 0){                       // odd number
+            result = (result * base) % modulator;
+        }
+        exponent = exponent >> 1;
+        base = (base * base) % modulator;
     }
-    
-    int c = 1;
-    
-    for(int e_prime = 0; e_prime < exponent; e_prime++){
-        c = (c * base) % modulus;
-    }
-    
-    return c;
+    return result;
 }
+
 
 int calculate_h(vector<int> aVec, int m, int M, int d){
 	int h = 0, j, x;
@@ -49,10 +50,13 @@ int calculate_h(vector<int> aVec, int m, int M, int d){
 
 	for(int i = 0; i < d; i++){									//modulo
 		x = ((aVec[j]%M) * modular_pow(m, i, M)) % M;
+
 		//cout << "pow(m,i)%M = " << (int)pow(m,i) << " Modular exponentiation = " << modular_pow(m, i, M) << endl;
 		//cout << "x = " << x << endl;
-		if(x < 0)
-			x += M;
+		
+		// if(x < 0)
+		// 	x += M;
+		
 		//cout << "x after = " << x << endl;
 		h += x % M;
 		j--;

@@ -15,7 +15,7 @@ int main(int argc, char** argv){
     int n_rows=0, n_cols=0;
     int d, M, h, pos;
     unsigned int g;
-    int hTableSize;
+    int hTableSize, probes;
 
 	vector< vector<unsigned char> > pVec; 
 	vector<unsigned char> tempVec;
@@ -28,7 +28,8 @@ int main(int argc, char** argv){
 
 	hTableNode node;
 	
-	read_input(&argc, argv, &iFile, &qFile, &k, &L, &oFile, &N, &R, &w);
+	
+	read_inputLSH(&argc, argv, &iFile, &qFile, &k, &L, &oFile, &N, &R, &w);
 	
 	M = pow(2,floor(32/k));
 	
@@ -72,7 +73,7 @@ int main(int argc, char** argv){
 	        	node.pVec = pVec[i];
 	        	hashTable[pos].push_back(node);            // insert image in the hash table
 			}
-			
+			//cout << endl << "==========================================================" << endl << endl;
 			lHashTables.push_back(hashTable);
 			hashTable.erase(hashTable.begin(), hashTable.end());
 			//check if sVec, hVec need to be erased
@@ -85,7 +86,7 @@ int main(int argc, char** argv){
 
 	    	ofstream ofile (oFile);
 			if (ofile.is_open()){
-				for(int i = 0; i < 10; i++){
+				for(int i = 0; i < number_of_images; i++){
 					
 					for (int j = 0; j < k; j++){
 						aVec = calculate_a(qVec[i], sVec[j], w, d);  // calculate a for every image

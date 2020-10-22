@@ -19,8 +19,10 @@ using namespace std;
 
 int reverseInt (int i);
 
-void read_input(int* argc, char** argv, string* iFile, string* qFile, int* k, int* L, string* oFile, int* N, double* R, double* w);
+void read_inputLSH(int* argc, char** argv, string* iFile, string* qFile, int* k, int* L, string* oFile, int* N, double* R, double* w);
 void read_data(ifstream &file, int* magic_number, int* number_of_images, int* n_rows, int* n_cols, vector< vector<unsigned char> >& pVec, vector<unsigned char>& tempVec);
+
+void read_inputCube(int* argc, char** argv, string* iFile, string* qFile, int* k, int* M, int* probes, string* oFile, int* N, double* R, double* w);
 
 // void printNestedList(list<list<unsigned char> > nested_list);
 

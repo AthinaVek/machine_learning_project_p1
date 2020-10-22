@@ -25,6 +25,12 @@ public:
 	vector<unsigned char> pVec;
 };
 
+class fNode{
+public:
+	int h;
+	bool f;
+};
+
 class distanceNode{
 public:
 	int pPos;
