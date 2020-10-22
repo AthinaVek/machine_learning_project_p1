@@ -40,7 +40,7 @@ int main(int argc, char** argv){
 	    read_data(file, &magic_number, &number_of_images, &n_rows, &n_cols, pVec, tempVec);
 			
 		d = n_rows * n_cols;						           // dimension
-	    hTableSize = number_of_images / NForTable;
+	    hTableSize = 2^k;
 	    
 	    vector< vector <hTableNode> > hashTable;       // hash table
 
@@ -102,22 +102,24 @@ int main(int argc, char** argv){
 
         	// bitset<32> x(p);
         	// cout << "p:  " << x << endl << endl;
+        	
+        	cout << "p:  " << p << endl;
 
+			node.pPos = i;
+        	node.pVec = pVec[i];
+        	hashTable[p].push_back(node);            // insert image in the hash table
 
+        	cout << "!!!!" << endl;
+
+		}
         	///////////////////////////////////////////////////////////////////
 
 
 
         	
-
-        	
         	// //cout << "pos = " << pos << endl;
 
-        	// node.pPos = i;
-        	// node.g = g;
-        	// node.pVec = pVec[i];
-        	// hashTable[pos].push_back(node);            // insert image in the hash table
-		}
+        	
 			
 		// 	for (int t=0; t<hashTable.size(); t++){
 		// 		cout << hashTable[t].size() << endl;
