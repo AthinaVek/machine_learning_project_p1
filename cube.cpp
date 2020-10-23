@@ -13,8 +13,8 @@ int main(int argc, char** argv){
 	double R, w;
 	int magic_number=0, number_of_images=0;
     int n_rows=0, n_cols=0;
-    int d, M, h, pos;
-    unsigned int g, p;
+    int d, M, h, pos, p;
+    unsigned int g;
     int hTableSize;
     bool exists, first=1;
 
@@ -40,7 +40,7 @@ int main(int argc, char** argv){
 	    read_data(file, &magic_number, &number_of_images, &n_rows, &n_cols, pVec, tempVec);
 			
 		d = n_rows * n_cols;						           // dimension
-	    hTableSize = 2^k;
+	    hTableSize = pow(2,k);
 	    
 	    vector< vector <hTableNode> > hashTable;       // hash table
 
@@ -102,7 +102,7 @@ int main(int argc, char** argv){
 
         	// bitset<32> x(p);
         	// cout << "p:  " << x << endl << endl;
-        	
+
         	cout << "p:  " << p << endl;
 
 			node.pPos = i;
@@ -114,11 +114,6 @@ int main(int argc, char** argv){
 		}
         	///////////////////////////////////////////////////////////////////
 
-
-
-        	
-        	// //cout << "pos = " << pos << endl;
-
         	
 			
 		// 	for (int t=0; t<hashTable.size(); t++){
@@ -126,11 +121,6 @@ int main(int argc, char** argv){
 		// 	}
 		// 	cout << "===============" << endl;
 
-		// 	lHashTables.push_back(hashTable);
-		// 	hashTable.erase(hashTable.begin(), hashTable.end());
-		// 	//check if sVec, hVec need to be erased
-		// }
-		
 
 		// ifstream qfile (qFile);
 	 //    if (qfile.is_open()){
