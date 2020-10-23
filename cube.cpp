@@ -1,5 +1,6 @@
 #include "help_functions.h"
 #include "calculations.h"
+#include "calculations_cube.h"
 
 #define m 107					//a_max < m < M/2
 #define NForTable 16
@@ -16,16 +17,14 @@ int main(int argc, char** argv){
     int d, M, h, pos, p;
     unsigned int g;
     int hTableSize;
-    bool exists, first=1;
+    bool exists;
 
-	vector< vector<unsigned char> > pVec; 
+	vector< vector<unsigned char> > pVec, qVec; 
 	vector<unsigned char> tempVec;
 	vector< vector<int> > sVec;
-	vector<int> aVec;
+	vector<int> aVec, tempIntVec;
 	vector<fNode> tempfVec;
-	vector< vector<fNode> > fVec;
-	vector<int> tempIntVec;
-	vector< vector<unsigned char> > qVec;
+	vector< vector<fNode> > fVec, qfVec;
 	vector<distanceNode> distLsh, distTrue, distRange;
 
 	hTableNode node;
@@ -54,23 +53,23 @@ int main(int argc, char** argv){
 			tempIntVec.erase(tempIntVec.begin(), tempIntVec.end());
         }
         
-        for (int i=0; i < 10; i++){
+        for (int i=0; i < 100; i++){
 			for (int j = 0; j < k; j++){
 				aVec = calculate_a(pVec[i], sVec[j], w, d);  // calculate a for every image
 				h = calculate_h(aVec, m, M, d);              // calculate h for every image
 
 				exists = 0;
-				if (first){
-					for (int p=0; p<tempfVec.size(); p++){
-						if (h == tempfVec[p].h){
-							exists = 1;
-							fnode.h = h;
-							fnode.f = tempfVec[p].f;
-							break;
-						}
+				
+				for (int p=0; p<tempfVec.size(); p++){
+					if (h == tempfVec[p].h){
+						exists = 1;
+						fnode.h = h;
+						fnode.f = tempfVec[p].f;
+						break;
 					}
 				}
-				else{
+				
+				if(exists == 0){
 					for (int j=0; j<fVec.size(); j++){
 						for (int p=0; p<fVec[j].size(); p++){
 							if (h == fVec[j][p].h){
@@ -93,7 +92,6 @@ int main(int argc, char** argv){
 				tempfVec.push_back(fnode);
 				// cout << fnode.f << endl;
 			}
-			first = 0;
 
 			fVec.push_back(tempfVec);                      // save f*k distinct of every image
         	tempfVec.erase(tempfVec.begin(), tempfVec.end());
@@ -122,22 +120,68 @@ int main(int argc, char** argv){
 		// 	cout << "===============" << endl;
 
 
-		// ifstream qfile (qFile);
-	 //    if (qfile.is_open()){
-	 //        read_data(qfile, &magic_number, &number_of_images, &n_rows, &n_cols, qVec, tempVec);
+		ifstream qfile (qFile);
+		if (qfile.is_open()){
+			read_data(qfile, &magic_number, &number_of_images, &n_rows, &n_cols, qVec, tempVec);
 
-	 //    	ofstream ofile (oFile);
-		// 	if (ofile.is_open()){
-		// 		for(int i = 0; i < 100; i++){
+			ofstream ofile (oFile);
+			if (ofile.is_open()){
+				for(int i = 0; i < 100; i++){
+				
+					for (int j = 0; j < k; j++){
+						aVec = calculate_a(qVec[i], sVec[j], w, d);  // calculate a for every image
+						h = calculate_h(aVec, m, M, d);              // calculate h for every image
+						tempIntVec.push_back(h);
 					
-		// 			for (int j = 0; j < k; j++){
-		// 				aVec = calculate_a(qVec[i], sVec[j], w, d);  // calculate a for every image
-		// 				h = calculate_h(aVec, m, M, d);              // calculate h for every image
-		// 				tempIntVec.push_back(h);
-		// 			}
-		// 			g = calculate_g(tempIntVec, k);                  // calculate g for every image
-		// 			pos = g % hTableSize;                         // find the position to insert the image in the hash table
+						exists = 0;
+				
+						for (int p=0; p<tempfVec.size(); p++){
+							if (h == tempfVec[p].h){
+								exists = 1;
+								fnode.h = h;
+								fnode.f = tempfVec[p].f;
+								break;
+							}
+						}
+						
+						if(exists == 0){
+							for (int j=0; j<qfVec.size(); j++){
+								for (int p=0; p<qfVec[j].size(); p++){
+									if (h == qfVec[j][p].h){
+										exists = 1;
+										fnode.h = h;
+										fnode.f = qfVec[j][p].f;
+										break;
+									}
+								}
+								if (exists){
+									break;
+								}
+							}
+						}
+						
+						if (exists == 0){
+							fnode.h = h;
+							fnode.f = rand() % 2 + 0;
+						}
+						tempfVec.push_back(fnode);
+					}
 					
+					qfVec.push_back(tempfVec);                    		  // save f*k distinct of every image
+					tempfVec.erase(tempfVec.begin(), tempfVec.end());
+					
+					p = calculate_p(qfVec[i], k);
+					
+					
+					
+					
+					
+					
+					
+				}
+					
+					
+        	
 		// 			auto t1 = chrono::high_resolution_clock::now();
 		// 			distLsh = approximate_nearest_neighbor(qVec[i], lHashTables, L, pos, d, N, ofile);
 		// 			auto t2 = chrono::high_resolution_clock::now();
@@ -169,11 +213,11 @@ int main(int argc, char** argv){
 		// 			}
 		// 			ofile << endl;
 		// 		}
-		// 	}
-		// }
-		// else{
-		// 	cout << "Could not open query file." << endl;
-		// }
+			}
+		 }
+		 else{
+		 	cout << "Could not open query file." << endl;
+		 }
 	}
     else {
     	cout << "Could not open input file." << endl;
