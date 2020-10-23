@@ -36,12 +36,7 @@ int modular_pow(int base, int exponent, int modulus);
 vector<int> get_s(double w, int d);
 vector<int> calculate_a(vector<unsigned char> pVec, vector<int> sVec, double w, int d);
 int calculate_h(vector<int> aVec, int m, int M, int d);
-unsigned int calculate_g(vector<int> hVec, int k);
 unsigned int manhattan_dist(vector<unsigned char> qVec, vector<unsigned char> pVec, int d);
-
-vector<distanceNode> approximate_nearest_neighbor(vector<unsigned char> qVec, vector < vector< vector <hTableNode> > > lHashTables, int L, int pos, int d, int N, ofstream &ofile);
-vector<distanceNode> actual_nearest_neighbor(vector<unsigned char>  qVec, vector< vector< unsigned char> > pVec, int d, int N, ofstream &ofile);
-vector<distanceNode> approximate_range_search(vector<unsigned char> qVec, vector < vector< vector <hTableNode> > > lHashTables, int L, int pos, int d, double R, ofstream &ofile);
 
 
 

@@ -1,5 +1,6 @@
 #include "help_functions.h"
 #include "calculations.h"
+#include "calculations_lsh.h"
 
 #define m 107					//a_max < m < M/2
 #define NForTable 16

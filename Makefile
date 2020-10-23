@@ -1,7 +1,7 @@
 all: lsh cube
 
-lsh: lsh.o help_functions.o calculations.o
-	g++ lsh.o help_functions.o calculations.o -o lsh
+lsh: lsh.o help_functions.o calculations.o calculations_lsh.o
+	g++ lsh.o help_functions.o calculations.o calculations_lsh.o -o lsh
 
 cube: cube.o help_functions.o calculations.o calculations_cube.o
 	g++ cube.o help_functions.o calculations.o calculations_cube.o -o cube
@@ -17,9 +17,12 @@ help_functions.o: help_functions.cpp
 
 calculations.o: calculations.cpp
 	g++ -c calculations.cpp
+	
+calculations_lsh.o: calculations_lsh.cpp
+	g++ -c calculations_lsh.cpp
 
 calculations_cube.o: calculations_cube.cpp
 	g++ -c calculations_cube.cpp
 
 clean:
-	rm -f lsh cube help_functions calculations calculations_cube lsh.o cube.o help_functions.o calculations.o calculations_cube.o
+	rm -f lsh cube help_functions calculations calculations_lsh calculations_cube lsh.o cube.o help_functions.o calculations.o calculations_lsh.o calculations_cube.o
