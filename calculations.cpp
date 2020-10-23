@@ -77,6 +77,34 @@ unsigned int manhattan_dist(vector<unsigned char> qVec, vector<unsigned char> pV
 	return dist;
 }
 
+vector<distanceNode> actual_nearest_neighbor(vector<unsigned char>  qVec, vector< vector< unsigned char> > pVec, int d, int N, ofstream &ofile){
+	unsigned int temp;							
+	distanceNode node;
+	vector<distanceNode> distances;
 
+	for(int i = 0; i < N; i++){
+		node.pPos = -1;
+		node.dist = 4294967295;                        //highest possible unsigned int
+		distances.push_back(node);							
+	}                            
+			
+	for( int j = 0; j < pVec.size(); j++){
+		temp = manhattan_dist(qVec, pVec[j], d);
+		if(temp < distances[N-1].dist){
+			
+			distances[N-1].dist = temp;
+			distances[N-1].pPos = j;
+			for(int c=N-2; c>=0; c--){
+				if(distances[c].dist > distances[c+1].dist){
+					iter_swap(distances.begin() + c, distances.begin() + c+1);
+				}
+				else{
+					break;
+				}
+			}
+		}
+	}
+	return distances;
+}
 
 

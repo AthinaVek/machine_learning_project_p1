@@ -38,6 +38,6 @@ vector<int> calculate_a(vector<unsigned char> pVec, vector<int> sVec, double w, 
 int calculate_h(vector<int> aVec, int m, int M, int d);
 unsigned int manhattan_dist(vector<unsigned char> qVec, vector<unsigned char> pVec, int d);
 
-
+vector<distanceNode> actual_nearest_neighbor(vector<unsigned char>  qVec, vector< vector< unsigned char> > pVec, int d, int N, ofstream &ofile);
 
 #endif
