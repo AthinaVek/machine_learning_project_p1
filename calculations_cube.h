@@ -16,6 +16,8 @@
 #include <algorithm>
 #include <climits>
 
+#include "calculations.h"
+
 using namespace std;
 
 
@@ -25,10 +27,10 @@ public:
 	bool f;
 };
 
-
-
 unsigned int calculate_p(vector<fNode> fVec, int k);
+vector<int> hamming_dist(int probes, int p);
 
-
+vector<distanceNode> approximate_nearest_neighbor_cube(vector<unsigned char> qVec, vector< vector <hTableNode> > hashTable, int p, int d, int N, int M, int probes, ofstream &ofile);
+vector<distanceNode> approximate_range_search_cube(vector<unsigned char> qVec, vector< vector <hTableNode> > hashTable, int p, int d, double R, ofstream &ofile, int M, int probes);
 
 #endif

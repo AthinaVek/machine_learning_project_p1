@@ -25,7 +25,7 @@ int main(int argc, char** argv){
 	vector<int> aVec, tempIntVec;
 	vector<fNode> tempfVec;
 	vector< vector<fNode> > fVec, qfVec;
-	vector<distanceNode> distLsh, distTrue, distRange;
+	vector<distanceNode> distCube, distTrue, distRange;
 
 	hTableNode node;
 	fNode fnode;
@@ -53,7 +53,7 @@ int main(int argc, char** argv){
 			tempIntVec.erase(tempIntVec.begin(), tempIntVec.end());
         }
         
-        for (int i=0; i < 100; i++){
+        for (int i=0; i < number_of_images; i++){
 			for (int j = 0; j < k; j++){
 				aVec = calculate_a(pVec[i], sVec[j], w, d);  // calculate a for every image
 				h = calculate_h(aVec, m, M, d);              // calculate h for every image
@@ -101,23 +101,15 @@ int main(int argc, char** argv){
         	// bitset<32> x(p);
         	// cout << "p:  " << x << endl << endl;
 
-        	cout << "p:  " << p << endl;
+        	// cout << "p:  " << p << endl;
 
 			node.pPos = i;
         	node.pVec = pVec[i];
         	hashTable[p].push_back(node);            // insert image in the hash table
 
-        	cout << "!!!!" << endl;
+        	// cout << "!!!!" << endl;
 
 		}
-        	///////////////////////////////////////////////////////////////////
-
-        	
-			
-		// 	for (int t=0; t<hashTable.size(); t++){
-		// 		cout << hashTable[t].size() << endl;
-		// 	}
-		// 	cout << "===============" << endl;
 
 
 		ifstream qfile (qFile);
@@ -126,7 +118,7 @@ int main(int argc, char** argv){
 
 			ofstream ofile (oFile);
 			if (ofile.is_open()){
-				for(int i = 0; i < 100; i++){
+				for(int i = 0; i < number_of_images; i++){
 				
 					for (int j = 0; j < k; j++){
 						aVec = calculate_a(qVec[i], sVec[j], w, d);  // calculate a for every image
@@ -172,47 +164,37 @@ int main(int argc, char** argv){
 					
 					p = calculate_p(qfVec[i], k);
 					
-					
-					
-					
-					
-					
-					
+					auto t1 = chrono::high_resolution_clock::now();
+					distCube = approximate_nearest_neighbor_cube(qVec[i], hashTable, p, d, N, M, probes, ofile);
+					auto t2 = chrono::high_resolution_clock::now();
+					auto durationCube = chrono::duration_cast<chrono::microseconds>( t2 - t1 ).count();
+
+					auto t3 = chrono::high_resolution_clock::now();
+					distTrue = actual_nearest_neighbor(qVec[i], pVec, d, N, ofile);
+					auto t4 = chrono::high_resolution_clock::now();
+					auto durationTrue = chrono::duration_cast<chrono::microseconds>( t4 - t3 ).count();
+
+					distRange = approximate_range_search_cube(qVec[i], hashTable, p, d, R, ofile, M, probes);
+
+					ofile  << "Query: " << i << endl;               // write to file
+					for (int j=0; j<N; j++){
+						ofile << "Nearest neighbor-N: " << distCube[j].pPos << endl;
+						ofile << "distanceHyperCube: " << distCube[j].dist << endl;
+						ofile << "distanceTrue: " << distTrue[j].dist << endl;
+					}
+					ofile << "tHyperCube: " << durationCube << endl;
+					ofile << "tTrue: " << durationTrue << endl;
+					ofile << "R-near neighbors:" << endl;
+					if (distRange.size() == 0){
+						ofile << "No neighbors in this range." << endl;
+					}
+					else{
+						for(int c=0; c<distRange.size(); c++){
+							ofile << distRange[c].pPos << endl;
+						}
+					}
+					ofile << endl;
 				}
-					
-					
-        	
-		// 			auto t1 = chrono::high_resolution_clock::now();
-		// 			distLsh = approximate_nearest_neighbor(qVec[i], lHashTables, L, pos, d, N, ofile);
-		// 			auto t2 = chrono::high_resolution_clock::now();
-		// 			auto durationLsh = chrono::duration_cast<chrono::microseconds>( t2 - t1 ).count();
-
-		// 			auto t3 = chrono::high_resolution_clock::now();
-		// 			distTrue = actual_nearest_neighbor(qVec[i], pVec, d, N, ofile);
-		// 			auto t4 = chrono::high_resolution_clock::now();
-		// 			auto durationTrue = chrono::duration_cast<chrono::microseconds>( t4 - t3 ).count();
-
-		// 			distRange = approximate_range_search( qVec[i], lHashTables, L, pos, d, R, ofile);
-
-		// 			ofile  << "Query: " << i << endl;               // write to file
-		// 			for (int j=0; j<N; j++){
-		// 				ofile << "Nearest neighbor-N: " << distLsh[j].pPos << endl;
-		// 				ofile << "distanceLSH: " << distLsh[j].dist << endl;
-		// 				ofile << "distanceTrue: " << distTrue[j].dist << endl;
-		// 			}
-		// 			ofile << "tLSH: " << durationLsh << endl;
-		// 			ofile << "tTrue: " << durationTrue << endl;
-		// 			ofile << "R-near neighbors:" << endl;
-		// 			if (distRange.size() == 0){
-		// 				ofile << "No neighbors in this range." << endl;
-		// 			}
-		// 			else{
-		// 				for(int c=0; c<distRange.size(); c++){
-		// 					ofile << distRange[c].pPos << endl;
-		// 				}
-		// 			}
-		// 			ofile << endl;
-		// 		}
 			}
 		 }
 		 else{
