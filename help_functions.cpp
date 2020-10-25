@@ -15,8 +15,8 @@ int reverseInt (int i){
     return ((int)c1 << 24) + ((int)c2 << 16) + ((int)c3 << 8) + c4;
 }
 
+
 void read_inputLSH(int* argc, char** argv, string* iFile, string* qFile, int* k, int* L, string* oFile, int* N, double* R, double* w){
-	
 	if(*argc == 15){                                          // Read input
 		for (int i = 1; i < 15; ++i){
 			if (string(argv[i]) == "-d"){
@@ -54,13 +54,11 @@ void read_inputLSH(int* argc, char** argv, string* iFile, string* qFile, int* k,
 		*N = 1;
 		*R = 10000;
 	}
-	
 	*w = 4 * (*R);
-	
 }
 
+
 void read_data(ifstream &file, int* magic_number, int* number_of_images, int* n_rows, int* n_cols, vector< vector<unsigned char> >& vec, vector<unsigned char>& tempVec){
-	
 	file.read((char*)magic_number,sizeof(*magic_number));    // read values from file
 	*magic_number = reverseInt(*magic_number);
 	file.read((char*)number_of_images,sizeof(*number_of_images));
@@ -82,12 +80,10 @@ void read_data(ifstream &file, int* magic_number, int* number_of_images, int* n_
 		vec.push_back(tempVec);                           // save vector of pixels for every image
 		tempVec.erase(tempVec.begin(), tempVec.end());
 	}
-	
 }
 
 
 void read_inputCube(int* argc, char** argv, string* iFile, string* qFile, int* k, int* M, int* probes, string* oFile, int* N, double* R, double* w){
-	
 	if(*argc == 17){                                          // Read input
 		for (int i = 1; i < 17; ++i){
 			if (string(argv[i]) == "-d"){
@@ -131,11 +127,10 @@ void read_inputCube(int* argc, char** argv, string* iFile, string* qFile, int* k
 	}
 	
 	*w = 4 * (*R);
-	
 }
 
+
 bool read_inputCluster(int* argc, char** argv, string* iFile, string* confFile, string* oFile, string* method){
-	
 	int count = 0;
 	
 	if(*argc == 8){                                          // Read input
@@ -163,12 +158,34 @@ bool read_inputCluster(int* argc, char** argv, string* iFile, string* confFile, 
 		}
 	}
 	else{
-		cout << "Wrong input!!! Exiting..." << endl;
-		return 0;
+		// cout << "Wrong input!!! Exiting..." << endl;
+
+		*iFile = "train-images-idx3-ubyte";                   //default values if not given by user
+		*confFile = "cluster.conf";
+		*oFile = "cluster_results.txt";
+		*method = "Classic";
+
+		return 1;
 	}
-	
 	return 1;
 }
 
 
+void read_confFile(int* K, int* L, int* kl, int* M, int* ky, int* probes, string confFile){
+	string line;
+	ifstream MyReadFile(confFile);
+	vector<string> results;
 
+	while (getline (MyReadFile, line)) {
+		istringstream iss(line);
+		vector<string> tokens((istream_iterator<string>(iss)), istream_iterator<string>());
+		results.push_back(tokens[1]);
+	}
+
+	*K = stoi(results[0]);
+	*L = stoi(results[1]);
+	*kl = stoi(results[2]);
+	*M = stoi(results[3]);
+	*ky = stoi(results[4]);
+	*probes = stoi(results[5]);
+}

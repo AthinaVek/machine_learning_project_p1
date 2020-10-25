@@ -3,16 +3,14 @@
 #include "calculations_lsh.h"
 #include "calculations_cube.h"
 
-
 using namespace std;
 
 
 int main(int argc, char** argv){
-	
 	string iFile, confFile, oFile, method;
 	int magic_number=0, number_of_images=0;
-    int n_rows=0, n_cols=0;
-    int d;
+    int n_rows=0, n_cols=0, d;
+    int K, L, kl, M, ky, probes; 
     
 	vector< vector<unsigned char> > pVec; 
 	vector<unsigned char> tempVec;
@@ -21,9 +19,9 @@ int main(int argc, char** argv){
 	srand (time(NULL));
 	
 	if(read_inputCluster(&argc, argv, &iFile, &confFile, &oFile, &method)){
-		
-		//read_confFile();
-		
+		read_confFile(&K, &L, &kl, &M, &ky, &probes, confFile);
+		cout << K << " " << L << " " << kl << " " << M << " " << ky << " " << probes << endl;
+
 		ifstream file (iFile);
 		if (file.is_open()){
 			read_data(file, &magic_number, &number_of_images, &n_rows, &n_cols, pVec, tempVec);
@@ -45,5 +43,5 @@ int main(int argc, char** argv){
 	
 	
 	
-	
+	return 0;
 }
