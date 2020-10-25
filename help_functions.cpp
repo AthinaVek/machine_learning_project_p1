@@ -134,35 +134,41 @@ void read_inputCube(int* argc, char** argv, string* iFile, string* qFile, int* k
 	
 }
 
-// void printNestedList(list<list<unsigned char> > nested_list) 
-// { 
-//     cout << "[\n"; 
-  
-//     // nested_list`s iterator(same type as nested_list) 
-//     // to iterate the nested_list 
-//     list<list<unsigned char> >::iterator nested_list_itr; 
-  
-//     // Print the nested_list 
-//     for (nested_list_itr = nested_list.begin(); 
-//          nested_list_itr != nested_list.end(); 
-//          ++nested_list_itr) { 
-  
-//         cout << "  ["; 
-  
-//         // normal_list`s iterator(same type as temp_list) 
-//         // to iterate the normal_list 
-//         list<unsigned char>::iterator single_list_itr; 
-  
-//         // pointer of each list one by one in nested list 
-//         // as loop goes on 
-//         list<unsigned char>& single_list_pointer = *nested_list_itr; 
-  
-//         for (single_list_itr = single_list_pointer.begin(); 
-//              single_list_itr != single_list_pointer.end(); 
-//              single_list_itr++) { 
-//             cout << " " << *single_list_itr << " "; 
-//         } 
-//         cout << "]\n"; 
-//     } 
-//     cout << "]"; 
-// } 
+bool read_inputCluster(int* argc, char** argv, string* iFile, string* confFile, string* oFile, string* method){
+	
+	int count = 0;
+	
+	if(*argc == 8){                                          // Read input
+		for (int i = 1; i < 8; ++i){
+			if (string(argv[i]) == "-d"){
+				*iFile = argv[i+1];
+				count++;
+			}
+			else if (string(argv[i]) == "-c"){
+				*confFile = argv[i+1];
+				count++;
+			}
+			else if (string(argv[i]) == "-o"){
+				*oFile = argv[i+1];
+				count++;
+			}
+			else if (string(argv[i]) == "-m"){
+				*method = argv[i+1];
+				count++;
+			}
+		}
+		if(count != 4){
+			cout << "Wrong input!!! Exiting..." << endl;
+			return 0;
+		}
+	}
+	else{
+		cout << "Wrong input!!! Exiting..." << endl;
+		return 0;
+	}
+	
+	return 1;
+}
+
+
+
