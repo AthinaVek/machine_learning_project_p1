@@ -107,4 +107,15 @@ vector<distanceNode> actual_nearest_neighbor(vector<unsigned char>  qVec, vector
 	return distances;
 }
 
-
+float get_x(unsigned int top){
+	
+	float x;
+	
+	unsigned seed = chrono::system_clock::now().time_since_epoch().count();
+    default_random_engine generator(seed);
+    uniform_real_distribution<float> distribution (0.0, top);
+    
+    x = distribution(generator);
+	
+	return x;
+}

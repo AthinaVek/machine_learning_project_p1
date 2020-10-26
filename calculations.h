@@ -31,6 +31,13 @@ public:
 	unsigned int dist;
 };
 
+class centroidDistance{
+public:
+	int pPos1;
+	int pPos2;
+	unsigned int dist;
+};
+
 int modular_pow(int base, int exponent, int modulus);
 
 vector<int> get_s(double w, int d);
@@ -39,5 +46,7 @@ int calculate_h(vector<int> aVec, int m, int M, int d);
 unsigned int manhattan_dist(vector<unsigned char> qVec, vector<unsigned char> pVec, int d);
 
 vector<distanceNode> actual_nearest_neighbor(vector<unsigned char>  qVec, vector< vector< unsigned char> > pVec, int d, int N, ofstream &ofile);
+
+float get_x(unsigned int top);
 
 #endif
