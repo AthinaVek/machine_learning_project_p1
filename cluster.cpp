@@ -21,7 +21,8 @@ int main(int argc, char** argv){
 	vector<unsigned char> tempVec;
 	vector< vector<unsigned char> > centroids;
 	vector<float> p;
-	vector<vector<clusterNode> > clusters;
+	vector<clusterNode> clusters;
+	clusterNode cNode;
 	
 	srand (time(NULL));
 	
@@ -31,6 +32,12 @@ int main(int argc, char** argv){
 		ifstream file (iFile);
 		if (file.is_open()){
 			read_data(file, &magic_number, &number_of_images, &n_rows, &n_cols, pVec, tempVec);
+
+			for(int i = 1; i < number_of_images; i++){
+				cNode.pVec = pVec[i];
+				cNode.cluster = k;
+				clusters.push_back(cNode);
+			} 
 			
 			d = n_rows * n_cols;
 			
@@ -44,64 +51,64 @@ int main(int argc, char** argv){
 				
 				for(int i = 1; i < number_of_images; i++){								//for every image
 					max = 0;
-					min = 4294967295;                      								//highest possible unsigned int
+					min = 4294967295;                                       //highest possible unsigned int
 					for(int j = 0; j < t; j++){											//for every centroid
-						
 						dist = manhattan_dist(pVec[i], centroids[j], d);
 						
 						if(dist < min)
 							min = (float)dist;
-						
 						if(dist > max)
 							max = (float)dist;
-						
 					}
-					
-					min = min / max;												//divide by max(d_i) to avoid large numbers
-					
+
+					if (t > 1){
+						min = min / max;												//divide by max(d_i) to avoid large numbers
+					}
 					min = pow(min,2);
 					min += p[i-1];													//calculate sum of d_i^2
-					
 					p.push_back(min);												//vector with min distances from centroids
-					
 				}
 				
-				x = get_x(p[number_of_images - t]);									//find random x in [0,P(n-t)]
+				x = get_x(p[number_of_images -1 - t]);									//find random x in [0,P(n-t)]
 				
 				for(y = 0; y < p.size(); y++){
-					
-					if(x < p[y])													//ceiling of range of x is the index of the new centroid
+					if(x < p[y]){   												//ceiling of range of x is the index of the new centroid
 						break;
+					}
 				}
 				centroids.push_back(pVec[y]);
 				t++;
 			}
 			
-			while(changes > 5){
-				changes = 0;
-				for(int i = 1; i < number_of_images; i++){								//assign each image to centroids
+
+			// while(changes > 5){
+				// changes = 0;
+
+				// for(int i = 1; i < 10; i++){								//assign each image to centroids
+				// 	min = 4294967295;                      								//highest possible unsigned int
 					
-					min = 4294967295;                      								//highest possible unsigned int
-					
-					for(int j = 0; j < k; j++){											//for every centroid
-							
-						dist = manhattan_dist(pVec[i], centroids[j], d);
+				// 	for(int j = 0; j < k; j++){											//for every centroid
+				// 		dist = manhattan_dist(pVec[i], centroids[j], d);
 						
-						if(dist < min){
-							min = (float)dist;
-							minc = j;
-						}
-						
-					}
-					clusters[j].push_back(pVec[i]);
-					
-				}
-			
-			}
+				// 		// cout << j << "   dist:" << dist << "   min :" << min << endl;
+				// 		if(dist < min){
+				// 			min = (float)dist;
+				// 			minc = j;
+				// 		}
+				// 	}
+				// 	// cout << "-----" << clusters[i].cluster << "   " << minc << endl;
+				// 	if (clusters[i].cluster != minc){
+				// 		clusters[i].cluster = minc;
+				// 		changes++;
+				// 	}
+				// }
+
+
+				// new cendroids
+
+
+			// }
 		}
-		
 	}
-	
-	
 	return 0;
 }

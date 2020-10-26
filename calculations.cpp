@@ -107,8 +107,7 @@ vector<distanceNode> actual_nearest_neighbor(vector<unsigned char>  qVec, vector
 	return distances;
 }
 
-float get_x(unsigned int top){
-	
+float get_x(float top){
 	float x;
 	
 	unsigned seed = chrono::system_clock::now().time_since_epoch().count();

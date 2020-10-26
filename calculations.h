@@ -46,6 +46,6 @@ unsigned int manhattan_dist(vector<unsigned char> qVec, vector<unsigned char> pV
 
 vector<distanceNode> actual_nearest_neighbor(vector<unsigned char>  qVec, vector< vector< unsigned char> > pVec, int d, int N, ofstream &ofile);
 
-float get_x(unsigned int top);
+float get_x(float top);
 
 #endif
