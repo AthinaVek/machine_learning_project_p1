@@ -31,11 +31,10 @@ public:
 	unsigned int dist;
 };
 
-class centroidDistance{
+class clusterNode{
 public:
-	int pPos1;
-	int pPos2;
-	unsigned int dist;
+	vector<unsigned char> pVec;
+	int cluster;
 };
 
 int modular_pow(int base, int exponent, int modulus);

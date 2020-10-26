@@ -13,7 +13,7 @@ int main(int argc, char** argv){
 	int magic_number=0, number_of_images=0;
     int n_rows=0, n_cols=0, d;
     int K, L, kl, M, ky, probes; 
-    int y, random, t = 0;
+    int y, random, t = 0, minc, changes = 6;
     unsigned int dist;
     float x, max = 0, min;
     
@@ -21,6 +21,7 @@ int main(int argc, char** argv){
 	vector<unsigned char> tempVec;
 	vector< vector<unsigned char> > centroids;
 	vector<float> p;
+	vector<vector<clusterNode> > clusters;
 	
 	srand (time(NULL));
 	
@@ -76,8 +77,27 @@ int main(int argc, char** argv){
 				t++;
 			}
 			
-			//update with medians
+			while(changes > 5){
+				changes = 0;
+				for(int i = 1; i < number_of_images; i++){								//assign each image to centroids
+					
+					min = 4294967295;                      								//highest possible unsigned int
+					
+					for(int j = 0; j < k; j++){											//for every centroid
+							
+						dist = manhattan_dist(pVec[i], centroids[j], d);
+						
+						if(dist < min){
+							min = (float)dist;
+							minc = j;
+						}
+						
+					}
+					clusters[j].push_back(pVec[i]);
+					
+				}
 			
+			}
 		}
 		
 	}
