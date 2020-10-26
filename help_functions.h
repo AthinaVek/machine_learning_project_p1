@@ -25,4 +25,7 @@ void read_inputCube(int* argc, char** argv, string* iFile, string* qFile, int* k
 bool read_inputCluster(int* argc, char** argv, string* iFile, string* confFile, string* oFile, string* method);
 
 void read_confFile(int* K, int* L, int* kl, int* M, int* ky, int* probes, string confFile);
+
+void swap(unsigned char *xp, unsigned char *yp);
+vector <unsigned char> bubbleSort(vector <unsigned char> pDim);
 #endif

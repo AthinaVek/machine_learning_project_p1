@@ -12,10 +12,11 @@ int main(int argc, char** argv){
 	string iFile, confFile, oFile, method;
 	int magic_number=0, number_of_images=0;
     int n_rows=0, n_cols=0, d;
-    int K, L, kl, M, ky, probes; 
+    int K, L, kl, M, ky, probes, median; 
     int y, random, t = 0, minc, changes = 6;
     unsigned int dist;
     float x, max = 0, min;
+    double cSize;
     
 	vector< vector<unsigned char> > pVec; 
 	vector<unsigned char> tempVec;
@@ -100,12 +101,28 @@ int main(int argc, char** argv){
 						changes++;
 					}
 				}
+		
 
+			
 				// new centroids
+				centroids.erase(centroids.begin(), centroids.end());
+				vector <unsigned char> pDim, tempC;
 
+				for (int j=0; j<k; j++){											//for every cluster
+					for (int z=0; z<d; z++){										//for every dimension
+						for (int i=0; i<clusters.size(); i++){						//for every image
+							if (clusters[i].cluster == j)								//if it belongs to the cluster j
+								pDim.push_back(clusters[i].pVec[z]);
+						}
+						//sort pDim
 
-
-			// }
+						pDim = bubbleSort(pDim);									//sort vector
+						cSize = (double)pDim.size();
+						median = ceil(cSize/2);										//median
+						tempC.push_back(pDim[median]);
+					}
+					centroids.push_back(tempC);
+				}
 		}
 	}
 	return 0;

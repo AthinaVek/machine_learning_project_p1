@@ -189,3 +189,24 @@ void read_confFile(int* K, int* L, int* kl, int* M, int* ky, int* probes, string
 	*ky = stoi(results[4]);
 	*probes = stoi(results[5]);
 }
+
+
+void swap(unsigned char *xp, unsigned char *yp){  
+    unsigned char temp = *xp;  
+    *xp = *yp;  
+    *yp = temp;  
+}  
+  
+
+vector <unsigned char> bubbleSort(vector <unsigned char> pDim){  
+    int i, j, n;  
+    n = pDim.size(); 
+    
+    for (i = 0; i < n-1; i++)      
+	    // Last i elements are already in place  
+	    for (j = 0; j < n-i-1; j++)  
+	        if (pDim[j] > pDim[j+1])  
+	            swap(&pDim[j], &pDim[j+1]);  
+
+	return pDim;
+}  
