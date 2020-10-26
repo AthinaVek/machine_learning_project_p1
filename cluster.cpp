@@ -84,27 +84,25 @@ int main(int argc, char** argv){
 			// while(changes > 5){
 				// changes = 0;
 
-				// for(int i = 1; i < 10; i++){								//assign each image to centroids
-				// 	min = 4294967295;                      								//highest possible unsigned int
+				for(int i = 0; i < 10; i++){								//assign each image to centroids
+					min = 4294967295;                      								//highest possible unsigned int
 					
-				// 	for(int j = 0; j < k; j++){											//for every centroid
-				// 		dist = manhattan_dist(pVec[i], centroids[j], d);
+					for(int j = 0; j < k; j++){											//for every centroid
+						dist = manhattan_dist(pVec[i], centroids[j], d);
 						
-				// 		// cout << j << "   dist:" << dist << "   min :" << min << endl;
-				// 		if(dist < min){
-				// 			min = (float)dist;
-				// 			minc = j;
-				// 		}
-				// 	}
-				// 	// cout << "-----" << clusters[i].cluster << "   " << minc << endl;
-				// 	if (clusters[i].cluster != minc){
-				// 		clusters[i].cluster = minc;
-				// 		changes++;
-				// 	}
-				// }
+						if(dist < min){
+							min = (float)dist;
+							minc = j;
+						}
+					}
+					if (clusters[i].cluster != minc){                        //if point goes to a new cluster
+						clusters[i].cluster = minc;
+						changes++;
+					}
+				}
 
+				// new centroids
 
-				// new cendroids
 
 
 			// }
