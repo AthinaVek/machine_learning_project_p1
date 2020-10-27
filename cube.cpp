@@ -87,10 +87,9 @@ int main(int argc, char** argv){
 				
 				if (exists == 0){
 					fnode.h = h;
-					fnode.f = rand() % 2 + 0;
+					fnode.f = get_f();
 				}
 				tempfVec.push_back(fnode);
-				// cout << fnode.f << endl;
 			}
 
 			fVec.push_back(tempfVec);                      // save f*k distinct of every image
@@ -98,19 +97,13 @@ int main(int argc, char** argv){
         	
         	p = calculate_p(fVec[i], k);
 
-        	// bitset<32> x(p);
-        	// cout << "p:  " << x << endl << endl;
-
-        	// cout << "p:  " << p << endl;
+        	
 
 			node.pPos = i;
         	node.pVec = pVec[i];
         	hashTable[p].push_back(node);            // insert image in the hash table
 
-        	// cout << "!!!!" << endl;
-
 		}
-
 
 		ifstream qfile (qFile);
 		if (qfile.is_open()){
@@ -118,7 +111,7 @@ int main(int argc, char** argv){
 
 			ofstream ofile (oFile);
 			if (ofile.is_open()){
-				for(int i = 0; i < number_of_images; i++){
+				for(int i = 0; i < 10; i++){
 				
 					for (int j = 0; j < k; j++){
 						aVec = calculate_a(qVec[i], sVec[j], w, d);  // calculate a for every image
@@ -154,7 +147,7 @@ int main(int argc, char** argv){
 						
 						if (exists == 0){
 							fnode.h = h;
-							fnode.f = rand() % 2 + 0;
+							fnode.f = get_f();
 						}
 						tempfVec.push_back(fnode);
 					}

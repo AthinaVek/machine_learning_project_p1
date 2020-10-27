@@ -6,12 +6,23 @@ unsigned int calculate_p(vector<fNode> fVec, int k){
 	for (int i=0; i<k; i++){
 		p = fVec[i].f << (k-1-i) | p ;
 	}
-	// cout << "///" << p << endl;
-	// p = (int)p | (int)pow(2,k);
-	// cout << p << endl;
+	
 	return p;
 }
 
+int get_f(){
+	
+	int f;
+	
+	unsigned seed = chrono::system_clock::now().time_since_epoch().count();
+    default_random_engine generator(seed);
+    uniform_int_distribution<int> distribution (0, 1);
+    
+    f = distribution(generator);
+	
+	return f;
+	
+}
 
 vector<int> hamming_dist(int probes, int p){
 	vector<int> hp;
@@ -51,10 +62,7 @@ vector<distanceNode> approximate_nearest_neighbor_cube(vector<unsigned char> qVe
 	for(int i=0; i<ph.size(); i++){                           // For every position with Hamming distance 1 until it searches M images
 		for(int j=0; j < hashTable[ph[i]].size(); j++){
 			temp = manhattan_dist(qVec, hashTable[ph[i]][j].pVec, d);
-			cout << "temp   " << temp << endl;
 			if(temp < distances[N-1].dist){
-				cout << " in " << endl;
-				cout << "in for   " << endl;
 				distances[N-1].dist = temp;
 				distances[N-1].pPos = hashTable[ph[i]][j].pPos;
 				for(int c=N-2; c>=0; c--){
@@ -90,15 +98,12 @@ vector<distanceNode> approximate_range_search_cube(vector<unsigned char> qVec, v
 	ph.insert(ph.begin(), p);                                 // Put p position in position 0 to search first
 
 	for(int i=0; i<ph.size(); i++){                           // For every position with Hamming distance 1 until it searches M images
-		// cout << "hhhhhhhhhhh" << hashTable[ph[i]].size() << endl;
 		for(int j=0; j < hashTable[ph[i]].size(); j++){
 			temp = manhattan_dist(qVec, hashTable[ph[i]][j].pVec, d);
-			// cout << temp << endl;
 			if(temp < R){
 				node.pPos = hashTable[ph[i]][j].pPos;
 				node.dist = temp;
 				distances.push_back(node);
-				// cout << "----" << hashTable[ph[i]][j].pPos << endl;
 			}
 			count++;
 			if (count >= M){
@@ -109,7 +114,6 @@ vector<distanceNode> approximate_range_search_cube(vector<unsigned char> qVec, v
 			break;
 		}
 	}
-	// cout << count << endl;
 
 	return distances;
 }
