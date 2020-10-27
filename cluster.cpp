@@ -82,10 +82,10 @@ int main(int argc, char** argv){
 			}
 			
 
-			// while(changes > 5){
-				// changes = 0;
+			while(changes > 5){
+				changes = 0;
 
-				for(int i = 0; i < 10; i++){								//assign each image to centroids
+				for(int i = 0; i < number_of_images; i++){								//assign each image to centroids
 					min = 4294967295;                      								//highest possible unsigned int
 					
 					for(int j = 0; j < k; j++){											//for every centroid
@@ -101,8 +101,10 @@ int main(int argc, char** argv){
 						changes++;
 					}
 				}
-		
-
+				
+				// cout << changes << endl;
+				if (changes <= 5)
+					break;
 			
 				// new centroids
 				centroids.erase(centroids.begin(), centroids.end());
@@ -123,6 +125,7 @@ int main(int argc, char** argv){
 					}
 					centroids.push_back(tempC);
 				}
+			}
 		}
 	}
 	return 0;
