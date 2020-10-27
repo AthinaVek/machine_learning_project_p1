@@ -17,13 +17,14 @@ int main(int argc, char** argv){
     unsigned int dist;
     float x, max = 0, min;
     double cSize;
+    bool notFound;
     
 	vector< vector<unsigned char> > pVec; 
 	vector<unsigned char> tempVec;
 	vector< vector<unsigned char> > centroids;
 	vector<float> p;
-	vector<clusterNode> clusters;
-	clusterNode cNode;
+	vector< vector<int> > clusters;
+	vector< vector<int> > temp;
 	
 	srand (time(NULL));
 	
@@ -34,10 +35,8 @@ int main(int argc, char** argv){
 		if (file.is_open()){
 			read_data(file, &magic_number, &number_of_images, &n_rows, &n_cols, pVec, tempVec);
 
-			for(int i = 1; i < number_of_images; i++){
-				cNode.pVec = pVec[i];
-				cNode.cluster = k;
-				clusters.push_back(cNode);
+			for(int i = 1; i < k; i++){
+				clusters.push_back(vector<int>());
 			} 
 			
 			d = n_rows * n_cols;
@@ -96,27 +95,43 @@ int main(int argc, char** argv){
 							minc = j;
 						}
 					}
-					if (clusters[i].cluster != minc){                        //if point goes to a new cluster
-						clusters[i].cluster = minc;
-						changes++;
-					}
+					temp[minc].push_back(i);
 				}
 				
-				// cout << changes << endl;
+				for(int i = 0; i < k; i++){
+					
+					for(int j = 0; j < temp[i].size(); j++){
+						
+						for(int z = 0; z < clusters[i].size(); z++){
+							
+							if(temp[i][j] == clusters[i][z]){
+								notFound = 0;
+							}
+							
+						}
+						changes += notFound;
+						if (changes > 5)
+							break;
+					}
+					if (changes > 5)
+						break;
+				}
+				
 				if (changes <= 5)
 					break;
-			
+					
+				clusters = temp;
+				temp.erase(temp.begin(), temp.end());
+				
 				// new centroids
 				centroids.erase(centroids.begin(), centroids.end());
 				vector <unsigned char> pDim, tempC;
 
 				for (int j=0; j<k; j++){											//for every cluster
 					for (int z=0; z<d; z++){										//for every dimension
-						for (int i=0; i<clusters.size(); i++){						//for every image
-							if (clusters[i].cluster == j)								//if it belongs to the cluster j
-								pDim.push_back(clusters[i].pVec[z]);
+						for (int i=0; i<clusters[j].size(); i++){					//for every image in the cluster
+							pDim.push_back(pVec[clusters[j][i]][z]);
 						}
-						//sort pDim
 
 						pDim = bubbleSort(pDim);									//sort vector
 						cSize = (double)pDim.size();
