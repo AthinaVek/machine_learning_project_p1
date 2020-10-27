@@ -117,8 +117,6 @@ int main(int argc, char** argv){
 					if (changes <= 5)
 						break;
 				}
-
-				counter++;
 					
 				clusters = temp;
 				temp.erase(temp.begin(), temp.end());
@@ -138,8 +136,11 @@ int main(int argc, char** argv){
 						cSize = (double)pDim.size();
 						median = ceil(cSize/2);										//median
 						tempC.push_back(pDim[median]);
+
+						pDim.erase(pDim.begin(), pDim.end());
 					}
 					centroids.push_back(tempC);
+					tempC.erase(tempC.begin(), tempC.end());
 				}
 				first = 0;
 			}
