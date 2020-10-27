@@ -13,7 +13,7 @@ int main(int argc, char** argv){
 	int magic_number=0, number_of_images=0;
     int n_rows=0, n_cols=0, d;
     int K, L, kl, M, ky, probes, median; 
-    int y, random, t = 0, minc, changes = 6;
+    int y, random, t = 0, minc, changes = 6, first=1;
     unsigned int dist;
     float x, max = 0, min;
     double cSize;
@@ -35,8 +35,9 @@ int main(int argc, char** argv){
 		if (file.is_open()){
 			read_data(file, &magic_number, &number_of_images, &n_rows, &n_cols, pVec, tempVec);
 
-			for(int i = 1; i < k; i++){
+			for(int i = 0; i < k; i++){
 				clusters.push_back(vector<int>());
+				temp.push_back(vector<int>());
 			} 
 			
 			d = n_rows * n_cols;
@@ -80,7 +81,7 @@ int main(int argc, char** argv){
 				t++;
 			}
 			
-
+			int counter=0;
 			while(changes > 5){
 				changes = 0;
 
@@ -89,7 +90,7 @@ int main(int argc, char** argv){
 					
 					for(int j = 0; j < k; j++){											//for every centroid
 						dist = manhattan_dist(pVec[i], centroids[j], d);
-						
+
 						if(dist < min){
 							min = (float)dist;
 							minc = j;
@@ -98,27 +99,26 @@ int main(int argc, char** argv){
 					temp[minc].push_back(i);
 				}
 				
-				for(int i = 0; i < k; i++){
-					
-					for(int j = 0; j < temp[i].size(); j++){
-						
-						for(int z = 0; z < clusters[i].size(); z++){
-							
-							if(temp[i][j] == clusters[i][z]){
-								notFound = 0;
+				if (first == 0){
+					for(int i = 0; i < k; i++){
+						for(int j = 0; j < temp[i].size(); j++){
+							for(int z = 0; z < clusters[i].size(); z++){
+								if(temp[i][j] == clusters[i][z]){
+									notFound = 0;
+								}
 							}
-							
+							changes += notFound;
+							if (changes > 5)
+								break;
 						}
-						changes += notFound;
 						if (changes > 5)
 							break;
 					}
-					if (changes > 5)
+					if (changes <= 5)
 						break;
 				}
-				
-				if (changes <= 5)
-					break;
+
+				counter++;
 					
 				clusters = temp;
 				temp.erase(temp.begin(), temp.end());
@@ -132,14 +132,16 @@ int main(int argc, char** argv){
 						for (int i=0; i<clusters[j].size(); i++){					//for every image in the cluster
 							pDim.push_back(pVec[clusters[j][i]][z]);
 						}
-
-						pDim = bubbleSort(pDim);									//sort vector
+						
+						quicksort(pDim, 0, pDim.size() - 1);
+						
 						cSize = (double)pDim.size();
 						median = ceil(cSize/2);										//median
 						tempC.push_back(pDim[median]);
 					}
 					centroids.push_back(tempC);
 				}
+				first = 0;
 			}
 		}
 	}

@@ -191,22 +191,42 @@ void read_confFile(int* K, int* L, int* kl, int* M, int* ky, int* probes, string
 }
 
 
-void swap(unsigned char *xp, unsigned char *yp){  
-    unsigned char temp = *xp;  
-    *xp = *yp;  
-    *yp = temp;  
-}  
-  
+int partition(vector<unsigned char> &values, int left, int right) {
+    int pivotIndex = left + (right - left) / 2;
+    int pivotValue = (int)values[pivotIndex];
+    int i = left, j = right;
+    unsigned char temp;
+    while(i <= j) {
+        while((int)values[i] < pivotValue) {
+            i++;
+        }
+        while((int)values[j] > pivotValue) {
+            j--;
+        }
+        if(i <= j) {
+            temp = values[i];
+            values[i] = values[j];
+            values[j] = temp;
+            i++;
+            j--;
+        }
+    }
+    return i;
+}
 
-vector <unsigned char> bubbleSort(vector <unsigned char> pDim){  
-    int i, j, n;  
-    n = pDim.size(); 
-    
-    for (i = 0; i < n-1; i++)      
-	    // Last i elements are already in place  
-	    for (j = 0; j < n-i-1; j++)  
-	        if (pDim[j] > pDim[j+1])  
-	            swap(&pDim[j], &pDim[j+1]);  
 
-	return pDim;
-}  
+void quicksort(vector<unsigned char> &values, int left, int right) {
+    if(left < right) {
+        int pivotIndex = partition(values, left, right);
+        quicksort(values, left, pivotIndex - 1);
+        quicksort(values, pivotIndex, right);
+    }
+}
+
+
+
+
+
+
+
+

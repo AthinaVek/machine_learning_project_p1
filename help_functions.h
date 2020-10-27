@@ -26,6 +26,7 @@ bool read_inputCluster(int* argc, char** argv, string* iFile, string* confFile, 
 
 void read_confFile(int* K, int* L, int* kl, int* M, int* ky, int* probes, string confFile);
 
-void swap(unsigned char *xp, unsigned char *yp);
-vector <unsigned char> bubbleSort(vector <unsigned char> pDim);
+void quicksort(vector<unsigned char> &values, int left, int right);
+int partition(vector<unsigned char> &values, int left, int right);
+
 #endif
