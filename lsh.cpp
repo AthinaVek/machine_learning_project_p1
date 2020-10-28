@@ -17,18 +17,16 @@ int main(int argc, char** argv){
     int d, M, h, pos;
     unsigned int g;
     int hTableSize, probes;
+    hTableNode node;
 
-	vector< vector<unsigned char> > pVec; 
+	vector< vector<unsigned char> > pVec, qVec;
 	vector<unsigned char> tempVec;
-	vector< vector<int> > sVec;
+	vector< vector<int> > sVec, hVec;
 	vector < vector< vector<int> > > lsVecs;
-	vector<int> aVec;
-	vector< vector<int> > hVec;
-	vector< vector<unsigned char> > qVec;
+	vector<int> aVec, tempIntVec;
 	vector<distanceNode> distLsh, distTrue, distRange;
-	vector<int> tempIntVec;
-	hTableNode node;
 	
+
 	read_inputLSH(&argc, argv, &iFile, &qFile, &k, &L, &oFile, &N, &R, &w);
 	
 	M = pow(2,floor(32/k));
@@ -58,7 +56,6 @@ int main(int argc, char** argv){
 				}
 
 				for(int i = 0; i < number_of_images; i++){
-					
 					for (int j = 0; j < k; j++){
 						aVec = calculate_a(qVec[i], sVec[j], w, d);  // calculate a for every image
 						h = calculate_h(aVec, m, M, d);              // calculate h for every image
@@ -66,7 +63,8 @@ int main(int argc, char** argv){
 					}
 					g = calculate_g(tempIntVec, k);                  // calculate g for every image
 					pos = g % hTableSize;                         // find the position to insert the image in the hash table
-					
+					tempIntVec.erase(tempIntVec.begin(), tempIntVec.end());
+
 					auto t1 = chrono::high_resolution_clock::now();
 					distLsh = approximate_nearest_neighbor(qVec[i], lHashTables, L, pos, d, N, ofile);
 					auto t2 = chrono::high_resolution_clock::now();
