@@ -6,8 +6,8 @@ lsh: lsh.o help_functions.o calculations.o calculations_lsh.o
 cube: cube.o help_functions.o calculations.o calculations_cube.o
 	g++ cube.o help_functions.o calculations.o calculations_cube.o -o cube
 
-cluster: cluster.o help_functions.o calculations.o calculations_cube.o calculations_lsh.o
-	g++ cluster.o help_functions.o calculations.o calculations_cube.o calculations_lsh.o -o cluster
+cluster: cluster.o help_functions.o calculations.o calculations_cube.o calculations_lsh.o calculations_cluster.o
+	g++ cluster.o help_functions.o calculations.o calculations_cube.o calculations_lsh.o calculations_cluster.o -o cluster
 
 lsh.o: lsh.cpp
 	g++ -c lsh.cpp
@@ -30,5 +30,8 @@ calculations_lsh.o: calculations_lsh.cpp
 calculations_cube.o: calculations_cube.cpp
 	g++ -c calculations_cube.cpp
 
+calculations_cluster.o: calculations_cluster.cpp
+	g++ -c calculations_cluster.cpp
+	
 clean:
-	rm -f lsh cube cluster help_functions calculations calculations_lsh calculations_cube lsh.o cube.o cluster.o help_functions.o calculations.o calculations_lsh.o calculations_cube.o
+	rm -f lsh cube cluster help_functions calculations calculations_lsh calculations_cube calculations_cluster lsh.o cube.o cluster.o help_functions.o calculations.o calculations_lsh.o calculations_cube.o calculations_cluster.o
