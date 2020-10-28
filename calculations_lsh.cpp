@@ -69,7 +69,7 @@ void create_hashtables_LSH(vector < vector< vector <hTableNode> > > &lHashTables
 	}
 }
 
-vector<distanceNode> approximate_nearest_neighbor(vector<unsigned char> qVec, vector < vector< vector <hTableNode> > > lHashTables, int L, int pos, int d, int N, ofstream &ofile){
+vector<distanceNode> approximate_nearest_neighbor(vector<unsigned char> qVec, vector < vector< vector <hTableNode> > > lHashTables, int L, int pos, int d, int N){
 	unsigned int temp;
 	distanceNode node;
 	vector<distanceNode> distances;
@@ -110,11 +110,10 @@ vector<distanceNode> approximate_nearest_neighbor(vector<unsigned char> qVec, ve
 	return distances;
  }
 
-vector<distanceNode> approximate_range_search(vector<unsigned char> qVec, vector < vector< vector <hTableNode> > > lHashTables, int L, int pos, int d, double R, ofstream &ofile){
+vector<distanceNode> approximate_range_search(vector<unsigned char> qVec, vector < vector< vector <hTableNode> > > lHashTables, int L, int pos, int d, double R){
 	unsigned int temp;
 	vector<distanceNode> distances;
 	distanceNode node;
-	bool flag;
 	
 	for(int i = 0; i < L; i++){
 		for(int j = 0; j < lHashTables[i][pos].size(); j++){

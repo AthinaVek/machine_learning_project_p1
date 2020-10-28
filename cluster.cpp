@@ -26,6 +26,7 @@ int main(int argc, char** argv){
 	vector< vector<int> > sVec, hVec;
 	vector < vector< vector<int> > > lsVecs;
 	vector<int> aVec, tempIntVec;
+	vector<distanceNode> distRange, distTemp;
 	
 	srand (time(NULL));
 
@@ -87,7 +88,7 @@ int main(int argc, char** argv){
 				}
 			}
 
-			R = min/2;
+			
 			w = 4*R;
 
 			create_hashtables_LSH(lHashTables, hashTable, pVec, sVec, lsVecs, aVec, hVec, node, L, hTableSize, kl, d, number_of_images, w, m, M);
@@ -99,6 +100,7 @@ int main(int argc, char** argv){
 			}
 
 			for(int i=0; i<k; i++){                           //for every centroid
+				R = min/2;
 				for (int j=0; j<kl; j++){
 					aVec = calculate_a(centroids[i], sVec[j], w, d);  // calculate a for every centroid
 					h = calculate_h(aVec, m, Ml, d);              // calculate h for every centroid
@@ -107,8 +109,19 @@ int main(int argc, char** argv){
 				}
 				g = calculate_g(tempIntVec, kl);                  // calculate g for every centroid
 				pos = g % hTableSize;                         // find the position to assign the centroid in the hash table
+				tempIntVec.erase(tempIntVec.begin(), tempIntVec.end());
 				
-				cout << pos << endl;
+				while(1){
+					distTemp = approximate_range_search_cluster(centroids, lHashTables, L, pos, d, R, i);
+					distRange.insert(distRange.end(), distTemp.begin(), distTemp.end() );
+
+					for (int i=0; i<distRange.size(); i++){
+						cout << distRange[i].pPos << endl;
+					}
+					cout << "===============" << endl;
+
+					R = R*2;
+				}
 			}
 		}
 

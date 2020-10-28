@@ -66,16 +66,16 @@ int main(int argc, char** argv){
 					tempIntVec.erase(tempIntVec.begin(), tempIntVec.end());
 
 					auto t1 = chrono::high_resolution_clock::now();
-					distLsh = approximate_nearest_neighbor(qVec[i], lHashTables, L, pos, d, N, ofile);
+					distLsh = approximate_nearest_neighbor(qVec[i], lHashTables, L, pos, d, N);
 					auto t2 = chrono::high_resolution_clock::now();
 					auto durationLsh = chrono::duration_cast<chrono::microseconds>( t2 - t1 ).count();
 
 					auto t3 = chrono::high_resolution_clock::now();
-					distTrue = actual_nearest_neighbor(qVec[i], pVec, d, N, ofile);
+					distTrue = actual_nearest_neighbor(qVec[i], pVec, d, N);
 					auto t4 = chrono::high_resolution_clock::now();
 					auto durationTrue = chrono::duration_cast<chrono::microseconds>( t4 - t3 ).count();
 
-					distRange = approximate_range_search( qVec[i], lHashTables, L, pos, d, R, ofile);
+					distRange = approximate_range_search( qVec[i], lHashTables, L, pos, d, R);
 
 					ofile  << "Query: " << i << endl;               // write to file
 					for (int j=0; j<N; j++){

@@ -77,7 +77,7 @@ unsigned int manhattan_dist(vector<unsigned char> qVec, vector<unsigned char> pV
 	return dist;
 }
 
-vector<distanceNode> actual_nearest_neighbor(vector<unsigned char>  qVec, vector< vector< unsigned char> > pVec, int d, int N, ofstream &ofile){
+vector<distanceNode> actual_nearest_neighbor(vector<unsigned char>  qVec, vector< vector< unsigned char> > pVec, int d, int N){
 	unsigned int temp;							
 	distanceNode node;
 	vector<distanceNode> distances;

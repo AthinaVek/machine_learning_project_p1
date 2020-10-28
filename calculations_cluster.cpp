@@ -119,3 +119,35 @@ void update_centroids_median(vector< vector<unsigned char> > &centroids, vector 
 	}
 }
 
+
+vector<distanceNode> approximate_range_search_cluster(vector < vector<unsigned char> > centroids, vector < vector< vector <hTableNode> > > &lHashTables, int L, int pos, int d, double R, int cluster){
+	unsigned int temp, x1, x2;
+	vector<distanceNode> distances;
+	distanceNode node;
+	
+	for(int i = 0; i < L; i++){
+		for(int j = 0; j < lHashTables[i][pos].size(); j++){
+			temp = manhattan_dist(centroids[cluster], lHashTables[i][pos][j].pVec, d);
+			if(temp < R){
+				if (lHashTables[i][pos][j].flag == 0){
+					lHashTables[i][pos][j].flag = 1;
+					lHashTables[i][pos][j].cluster = cluster;
+					node.pPos = j;
+					node.dist = temp;
+					distances.push_back(node);
+				}
+				else if(lHashTables[i][pos][j].cluster != cluster){
+					x1 = manhattan_dist(centroids[cluster], lHashTables[i][pos][j].pVec, d);
+					x2 = manhattan_dist(centroids[lHashTables[i][pos][j].cluster], lHashTables[i][pos][j].pVec, d);
+					if (x1 < x2){
+						lHashTables[i][pos][j].cluster = cluster;
+						node.pPos = j;
+						node.dist = temp;
+						distances.push_back(node);
+					}
+				}
+			}
+		}
+	}
+	return distances;
+ }

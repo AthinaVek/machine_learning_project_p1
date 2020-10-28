@@ -159,16 +159,16 @@ int main(int argc, char** argv){
 					p = calculate_p(qfVec[i], k);
 					
 					auto t1 = chrono::high_resolution_clock::now();
-					distCube = approximate_nearest_neighbor_cube(qVec[i], hashTable, p, d, N, M, probes, ofile);
+					distCube = approximate_nearest_neighbor_cube(qVec[i], hashTable, p, d, N, M, probes);
 					auto t2 = chrono::high_resolution_clock::now();
 					auto durationCube = chrono::duration_cast<chrono::microseconds>( t2 - t1 ).count();
 
 					auto t3 = chrono::high_resolution_clock::now();
-					distTrue = actual_nearest_neighbor(qVec[i], pVec, d, N, ofile);
+					distTrue = actual_nearest_neighbor(qVec[i], pVec, d, N);
 					auto t4 = chrono::high_resolution_clock::now();
 					auto durationTrue = chrono::duration_cast<chrono::microseconds>( t4 - t3 ).count();
 
-					distRange = approximate_range_search_cube(qVec[i], hashTable, p, d, R, ofile, M, probes);
+					distRange = approximate_range_search_cube(qVec[i], hashTable, p, d, R, M, probes);
 
 					ofile  << "Query: " << i << endl;               // write to file
 					for (int j=0; j<N; j++){
