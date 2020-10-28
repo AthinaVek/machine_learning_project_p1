@@ -17,6 +17,7 @@
 #include <climits>
 
 #include "calculations.h"
+#include "help_functions.h"
 
 using namespace std;
 
@@ -24,5 +25,7 @@ using namespace std;
 void k_means_init(vector< vector<unsigned char> > &centroids, int number_of_images, vector< vector<unsigned char> > pVec, int k, int d);
 
 void lloyds_assignment(vector< vector<int> > &clusters, vector< vector<int> > temp, int number_of_images, vector< vector<unsigned char> > pVec, vector< vector<unsigned char> > centroids, int k, int d, int *changes, int first);
+
+void update_centroids_median(vector< vector<unsigned char> > &centroids, vector <unsigned char> pDim, vector< vector<unsigned char> > pVec, vector< vector<int> > clusters, vector <unsigned char> tempC, int k, int d);
 
 #endif

@@ -11,11 +11,11 @@ int main(int argc, char** argv){
 	string iFile, confFile, oFile, method;
 	int magic_number=0, number_of_images=0;
     int n_rows=0, n_cols=0, d;
-    int k, L, kl, M, ky, probes, median; 
+    int k, L, kl, M, ky, probes; 
     int y, minc, changes = 6, first=1;
     unsigned int dist;
     float x, max = 0, min;
-    double cSize;
+    
     
     
 	vector< vector<unsigned char> > pVec; 
@@ -23,6 +23,7 @@ int main(int argc, char** argv){
 	vector< vector<unsigned char> > centroids;
 	vector< vector<int> > clusters;
 	vector< vector<int> > temp;
+	vector <unsigned char> pDim, tempC;
 	
 	srand (time(NULL));
 	
@@ -52,28 +53,15 @@ int main(int argc, char** argv){
 					if (changes <= 5)
 						break;
 				}
-					
+				else{
+					changes = 6;
+				}	
+				
 				// new centroids
 				centroids.erase(centroids.begin(), centroids.end());
-				vector <unsigned char> pDim, tempC;
 				
-				for (int j=0; j<k; j++){											//for every cluster
-					for (int z=0; z<d; z++){										//for every dimension
-						for (int i=0; i<clusters[j].size(); i++){					//for every image in the cluster
-							pDim.push_back(pVec[clusters[j][i]][z]);
-						}
-						
-						quicksort(pDim, 0, pDim.size() - 1);
-						
-						cSize = (double)pDim.size();
-						median = ceil(cSize/2);										//median
-						tempC.push_back(pDim[median]);
-
-						pDim.erase(pDim.begin(), pDim.end());
-					}
-					centroids.push_back(tempC);
-					tempC.erase(tempC.begin(), tempC.end());
-				}
+				update_centroids_median(centroids, pDim, pVec, clusters, tempC, k, d);
+				
 				first = 0;
 			}
 		}

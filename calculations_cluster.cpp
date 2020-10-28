@@ -94,3 +94,28 @@ void lloyds_assignment(vector< vector<int> > &clusters, vector< vector<int> > te
 	temp.erase(temp.begin(), temp.end());
 	
 }
+
+void update_centroids_median(vector< vector<unsigned char> > &centroids, vector <unsigned char> pDim, vector< vector<unsigned char> > pVec, vector< vector<int> > clusters, vector <unsigned char> tempC, int k, int d){
+	
+	double cSize;
+	int median;
+	
+	for (int j=0; j<k; j++){											//for every cluster
+		for (int z=0; z<d; z++){										//for every dimension
+			for (int i=0; i<clusters[j].size(); i++){					//for every image in the cluster
+				pDim.push_back(pVec[clusters[j][i]][z]);
+			}
+			
+			quicksort(pDim, 0, pDim.size() - 1);
+			
+			cSize = (double)pDim.size();
+			median = ceil(cSize/2);										//median
+			tempC.push_back(pDim[median]);
+
+			pDim.erase(pDim.begin(), pDim.end());
+		}
+		centroids.push_back(tempC);
+		tempC.erase(tempC.begin(), tempC.end());
+	}
+}
+
