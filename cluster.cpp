@@ -3,8 +3,6 @@
 #include "calculations_lsh.h"
 #include "calculations_cube.h"
 
-#define k 10
-
 using namespace std;
 
 
@@ -12,7 +10,7 @@ int main(int argc, char** argv){
 	string iFile, confFile, oFile, method;
 	int magic_number=0, number_of_images=0;
     int n_rows=0, n_cols=0, d;
-    int K, L, kl, M, ky, probes, median; 
+    int k, L, kl, M, ky, probes, median; 
     int y, random, t = 0, minc, changes = 6, first=1;
     unsigned int dist;
     float x, max = 0, min;
@@ -28,60 +26,60 @@ int main(int argc, char** argv){
 	
 	srand (time(NULL));
 	
-	if(read_inputCluster(&argc, argv, &iFile, &confFile, &oFile, &method)){
-		read_confFile(&K, &L, &kl, &M, &ky, &probes, confFile);
+	read_inputCluster(&argc, argv, &iFile, &confFile, &oFile, &method);
+	read_confFile(&k, &L, &kl, &M, &ky, &probes, confFile);
+	
+	ifstream file (iFile);
+	if (file.is_open()){
+		read_data(file, &magic_number, &number_of_images, &n_rows, &n_cols, pVec, tempVec);
 
-		ifstream file (iFile);
-		if (file.is_open()){
-			read_data(file, &magic_number, &number_of_images, &n_rows, &n_cols, pVec, tempVec);
-
-			for(int i = 0; i < k; i++){
-				clusters.push_back(vector<int>());
-				temp.push_back(vector<int>());
-			} 
+		for(int i = 0; i < k; i++){
+			clusters.push_back(vector<int>());
+			temp.push_back(vector<int>());
+		} 
+		
+		d = n_rows * n_cols;
+		
+		random = rand() % number_of_images + 0;
+		centroids.push_back(pVec[random]);										//first centroid chosen randomly
+		t++;
+		
+		p.push_back(0);															//p(0) = 0
+		
+		while(t < k){
 			
-			d = n_rows * n_cols;
-			
-			random = rand() % number_of_images + 0;
-			centroids.push_back(pVec[random]);										//first centroid chosen randomly
-			t++;
-			
-			p.push_back(0);															//p(0) = 0
-			
-			while(t < k){
-				
-				for(int i = 1; i < number_of_images; i++){								//for every image
-					max = 0;
-					min = 4294967295;                                       //highest possible unsigned int
-					for(int j = 0; j < t; j++){											//for every centroid
-						dist = manhattan_dist(pVec[i], centroids[j], d);
-						
-						if(dist < min)
-							min = (float)dist;
-						if(dist > max)
-							max = (float)dist;
-					}
-
-					if (t > 1){
-						min = min / max;												//divide by max(d_i) to avoid large numbers
-					}
-					min = pow(min,2);
-					min += p[i-1];													//calculate sum of d_i^2
-					p.push_back(min);												//vector with min distances from centroids
+			for(int i = 1; i < number_of_images; i++){								//for every image
+				max = 0;
+				min = 4294967295;                                       //highest possible unsigned int
+				for(int j = 0; j < t; j++){											//for every centroid
+					dist = manhattan_dist(pVec[i], centroids[j], d);
+					
+					if(dist < min)
+						min = (float)dist;
+					if(dist > max)
+						max = (float)dist;
 				}
-				
-				x = get_x(p[number_of_images -1 - t]);									//find random x in [0,P(n-t)]
-				
-				for(y = 0; y < p.size(); y++){
-					if(x < p[y]){   												//ceiling of range of x is the index of the new centroid
-						break;
-					}
+
+				if (t > 1){
+					min = min / max;												//divide by max(d_i) to avoid large numbers
 				}
-				centroids.push_back(pVec[y]);
-				t++;
+				min = pow(min,2);
+				min += p[i-1];													//calculate sum of d_i^2
+				p.push_back(min);												//vector with min distances from centroids
 			}
 			
-			int counter=0;
+			x = get_x(p[number_of_images -1 - t]);									//find random x in [0,P(n-t)]
+			
+			for(y = 0; y < p.size(); y++){
+				if(x < p[y]){   												//ceiling of range of x is the index of the new centroid
+					break;
+				}
+			}
+			centroids.push_back(pVec[y]);
+			t++;
+		}
+		
+		if(method == "Classic"){
 			while(changes > 5){
 				changes = 0;
 
@@ -144,6 +142,16 @@ int main(int argc, char** argv){
 				}
 				first = 0;
 			}
+		}
+		else if(method == "LSH"){
+			cout << "LSH" << endl;
+			
+		}
+		else if(method == "Hypercube"){
+			cout << "Hypercube" << endl;
+		}
+		else{
+			cout << "This method does not exist..." << endl;
 		}
 	}
 	return 0;

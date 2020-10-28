@@ -18,7 +18,7 @@ int reverseInt (int i){
 
 void read_inputLSH(int* argc, char** argv, string* iFile, string* qFile, int* k, int* L, string* oFile, int* N, double* R, double* w){
 	if(*argc == 15){                                          // Read input
-		for (int i = 1; i < 15; ++i){
+		for (int i = 1; i < 14; ++i){
 			if (string(argv[i]) == "-d"){
 				*iFile = argv[i+1];
 			}
@@ -47,7 +47,7 @@ void read_inputLSH(int* argc, char** argv, string* iFile, string* qFile, int* k,
 
 		*iFile = "train-images-idx3-ubyte";                   //default values if not given by user
 		*qFile = "t10k-images-idx3-ubyte";
-		*oFile = "lsh_results.txt";
+		*oFile = "results_lsh.txt";
 		
 		*k = 4;				
 		*L = 5;
@@ -85,7 +85,7 @@ void read_data(ifstream &file, int* magic_number, int* number_of_images, int* n_
 
 void read_inputCube(int* argc, char** argv, string* iFile, string* qFile, int* k, int* M, int* probes, string* oFile, int* N, double* R, double* w){
 	if(*argc == 17){                                          // Read input
-		for (int i = 1; i < 17; ++i){
+		for (int i = 1; i < 16; ++i){
 			if (string(argv[i]) == "-d"){
 				*iFile = argv[i+1];
 			}
@@ -117,7 +117,7 @@ void read_inputCube(int* argc, char** argv, string* iFile, string* qFile, int* k
 
 		*iFile = "train-images-idx3-ubyte";                   //default values if not given by user
 		*qFile = "t10k-images-idx3-ubyte";
-		*oFile = "cube_results.txt";
+		*oFile = "results_cube.txt";
 		
 		*k = 14;				
 		*M = 10;
@@ -130,44 +130,31 @@ void read_inputCube(int* argc, char** argv, string* iFile, string* qFile, int* k
 }
 
 
-bool read_inputCluster(int* argc, char** argv, string* iFile, string* confFile, string* oFile, string* method){
-	int count = 0;
-	
-	if(*argc == 8){                                          // Read input
+void read_inputCluster(int* argc, char** argv, string* iFile, string* confFile, string* oFile, string* method){
+	if(*argc == 9){                                          // Read input
 		for (int i = 1; i < 8; ++i){
-			if (string(argv[i]) == "-d"){
+			if (string(argv[i]) == "-i"){
 				*iFile = argv[i+1];
-				count++;
 			}
 			else if (string(argv[i]) == "-c"){
 				*confFile = argv[i+1];
-				count++;
 			}
 			else if (string(argv[i]) == "-o"){
 				*oFile = argv[i+1];
-				count++;
 			}
 			else if (string(argv[i]) == "-m"){
 				*method = argv[i+1];
-				count++;
 			}
-		}
-		if(count != 4){
-			cout << "Wrong input!!! Exiting..." << endl;
-			return 0;
 		}
 	}
 	else{
-		// cout << "Wrong input!!! Exiting..." << endl;
+		cout << "No right input given. Using default values." << endl;
 
 		*iFile = "train-images-idx3-ubyte";                   //default values if not given by user
 		*confFile = "cluster.conf";
-		*oFile = "cluster_results.txt";
-		*method = "Classic";
-
-		return 1;
+		*oFile = "results_cluster.txt";
+		*method = "LSH";
 	}
-	return 1;
 }
 
 
@@ -175,19 +162,20 @@ void read_confFile(int* K, int* L, int* kl, int* M, int* ky, int* probes, string
 	string line;
 	ifstream MyReadFile(confFile);
 	vector<string> results;
-
+	
 	while (getline (MyReadFile, line)) {
 		istringstream iss(line);
 		vector<string> tokens((istream_iterator<string>(iss)), istream_iterator<string>());
 		results.push_back(tokens[1]);
 	}
-
+	
 	*K = stoi(results[0]);
 	*L = stoi(results[1]);
 	*kl = stoi(results[2]);
 	*M = stoi(results[3]);
 	*ky = stoi(results[4]);
 	*probes = stoi(results[5]);
+	
 }
 
 
