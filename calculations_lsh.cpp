@@ -24,7 +24,7 @@ unsigned int calculate_g(vector<int> hVec, int k){
 	return g;
 }
 
-void create_hashtables_LSH(vector < vector< vector <hTableNode> > > &lHashTables, vector< vector <hTableNode> > &hashTable, vector< vector<unsigned char> > pVec, vector< vector<int> > &sVec, vector<int> aVec, vector< vector<int> > hVec, hTableNode node, int L, int hTableSize, int k, int d, int number_of_images, double w, int m, int M){
+void create_hashtables_LSH(vector < vector< vector <hTableNode> > > &lHashTables, vector< vector <hTableNode> > &hashTable, vector< vector<unsigned char> > pVec, vector< vector<int> > sVec, vector < vector< vector<int> > > &lsVecs, vector<int> aVec, vector< vector<int> > hVec, hTableNode node, int L, int hTableSize, int k, int d, int number_of_images, double w, int m, int M){
 	
 	int h, pos;
 	unsigned int g;
@@ -63,6 +63,8 @@ void create_hashtables_LSH(vector < vector< vector <hTableNode> > > &lHashTables
 		lHashTables.push_back(hashTable);
 		hashTable.erase(hashTable.begin(), hashTable.end());
 		hVec.erase(hVec.begin(), hVec.end());
+		lsVecs.push_back(sVec);
+		sVec.erase(sVec.begin(), sVec.end());
 	}
 }
 
@@ -117,18 +119,9 @@ vector<distanceNode> approximate_range_search(vector<unsigned char> qVec, vector
 		for(int j = 0; j < lHashTables[i][pos].size(); j++){
 			temp = manhattan_dist(qVec, lHashTables[i][pos][j].pVec, d);
 			if(temp < R){
-				flag = 0;
-				for (int c=0; c<distances.size(); c++){
-					if (distances[c].pPos == lHashTables[i][pos][j].pPos){
-						flag = 1;
-					}
-				}
-
-				if (flag == 0){
-					node.pPos = j;
-					node.dist = temp;
-					distances.push_back(node);
-				}
+				node.pPos = j;
+				node.dist = temp;
+				distances.push_back(node);
 			}
 		}
 	}

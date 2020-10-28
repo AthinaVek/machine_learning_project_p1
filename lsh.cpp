@@ -21,6 +21,7 @@ int main(int argc, char** argv){
 	vector< vector<unsigned char> > pVec; 
 	vector<unsigned char> tempVec;
 	vector< vector<int> > sVec;
+	vector < vector< vector<int> > > lsVecs;
 	vector<int> aVec;
 	vector< vector<int> > hVec;
 	vector< vector<unsigned char> > qVec;
@@ -42,7 +43,7 @@ int main(int argc, char** argv){
         vector < vector< vector <hTableNode> > > lHashTables;       // vector with L hash tables
         vector< vector <hTableNode> > hashTable;       // hash table
 
-		create_hashtables_LSH(lHashTables, hashTable, pVec, sVec, aVec, hVec, node, L, hTableSize, k, d, number_of_images, w, m, M);
+		create_hashtables_LSH(lHashTables, hashTable, pVec, sVec, lsVecs, aVec, hVec, node, L, hTableSize, k, d, number_of_images, w, m, M);
 
 		ifstream qfile (qFile);
 	    if (qfile.is_open()){
@@ -50,6 +51,12 @@ int main(int argc, char** argv){
 
 	    	ofstream ofile (oFile);
 			if (ofile.is_open()){
+				for (int i=0; i<k; i++){
+					tempIntVec = get_s(w, d);                     //s_i uniform random generator
+					sVec.push_back(tempIntVec);
+					tempIntVec.erase(tempIntVec.begin(), tempIntVec.end());
+				}
+
 				for(int i = 0; i < number_of_images; i++){
 					
 					for (int j = 0; j < k; j++){
