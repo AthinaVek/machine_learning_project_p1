@@ -57,6 +57,7 @@ void create_hashtables_LSH(vector < vector< vector <hTableNode> > > &lHashTables
 			node.pPos = i;
 			node.g = g;
 			node.pVec = pVec[i];
+			node.flag = 0;
 			hashTable[pos].push_back(node);            // insert image in the hash table
 		}
 		

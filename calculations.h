@@ -23,6 +23,7 @@ public:
 	int pPos;
 	unsigned int g;
 	vector<unsigned char> pVec;
+	bool flag;
 };
 
 class distanceNode{

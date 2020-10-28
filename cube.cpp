@@ -101,6 +101,7 @@ int main(int argc, char** argv){
 
 			node.pPos = i;
         	node.pVec = pVec[i];
+        	node.flag = 0;
         	hashTable[p].push_back(node);            // insert image in the hash table
 
 		}
