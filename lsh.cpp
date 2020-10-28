@@ -23,12 +23,10 @@ int main(int argc, char** argv){
 	vector< vector<int> > sVec;
 	vector<int> aVec;
 	vector< vector<int> > hVec;
-	vector<int> tempIntVec;
 	vector< vector<unsigned char> > qVec;
 	vector<distanceNode> distLsh, distTrue, distRange;
-
+	vector<int> tempIntVec;
 	hTableNode node;
-	
 	
 	read_inputLSH(&argc, argv, &iFile, &qFile, &k, &L, &oFile, &N, &R, &w);
 	
@@ -44,42 +42,7 @@ int main(int argc, char** argv){
         vector < vector< vector <hTableNode> > > lHashTables;       // vector with L hash tables
         vector< vector <hTableNode> > hashTable;       // hash table
 
-		for (int l=0; l<L; l++){
-	        for(int y=0; y<hTableSize; y++){
-			    hashTable.push_back(vector<hTableNode>()); //initialize the first index with a 2D vector
-			}
-
-	        for (int i=0; i<k; i++){
-				tempIntVec = get_s(w, d);                     //s_i uniform random generator
-				sVec.push_back(tempIntVec);
-				tempIntVec.erase(tempIntVec.begin(), tempIntVec.end());
-	        }
-	        
-	        for (int i=0; i < number_of_images; i++){
-				for (int j = 0; j < k; j++){
-					aVec = calculate_a(pVec[i], sVec[j], w, d);  // calculate a for every image
-					h = calculate_h(aVec, m, M, d);              // calculate h for every image
-					tempIntVec.push_back(h);
-				}
-				hVec.push_back(tempIntVec);                      // save k*h of every image
-	        	tempIntVec.erase(tempIntVec.begin(), tempIntVec.end());
-	        	
-	        	g = calculate_g(hVec[i], k);                  // calculate g for every image
-	        	pos = g % hTableSize;                         // find the position to insert the image in the hash table
-	        	
-	        	//cout << "pos = " << pos << endl;
-
-	        	node.pPos = i;
-	        	node.g = g;
-	        	node.pVec = pVec[i];
-	        	hashTable[pos].push_back(node);            // insert image in the hash table
-			}
-			//cout << endl << "==========================================================" << endl << endl;
-			lHashTables.push_back(hashTable);
-			hashTable.erase(hashTable.begin(), hashTable.end());
-			//check if sVec, hVec need to be erased
-		}
-		
+		create_hashtables_LSH(lHashTables, hashTable, pVec, sVec, aVec, hVec, node, L, hTableSize, k, d, number_of_images, w, m, M);
 
 		ifstream qfile (qFile);
 	    if (qfile.is_open()){

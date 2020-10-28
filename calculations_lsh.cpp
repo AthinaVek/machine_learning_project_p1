@@ -24,6 +24,48 @@ unsigned int calculate_g(vector<int> hVec, int k){
 	return g;
 }
 
+void create_hashtables_LSH(vector < vector< vector <hTableNode> > > &lHashTables, vector< vector <hTableNode> > &hashTable, vector< vector<unsigned char> > pVec, vector< vector<int> > &sVec, vector<int> aVec, vector< vector<int> > hVec, hTableNode node, int L, int hTableSize, int k, int d, int number_of_images, double w, int m, int M){
+	
+	int h, pos;
+	unsigned int g;
+	
+	vector<int> tempIntVec;
+	
+	for (int l=0; l<L; l++){
+		for(int y=0; y<hTableSize; y++){
+			hashTable.push_back(vector<hTableNode>()); //initialize the first index with a 2D vector
+		}
+
+		for (int i=0; i<k; i++){
+			tempIntVec = get_s(w, d);                     //s_i uniform random generator
+			sVec.push_back(tempIntVec);
+			tempIntVec.erase(tempIntVec.begin(), tempIntVec.end());
+		}
+		
+		for (int i=0; i < number_of_images; i++){
+			for (int j = 0; j < k; j++){
+				aVec = calculate_a(pVec[i], sVec[j], w, d);  // calculate a for every image
+				h = calculate_h(aVec, m, M, d);              // calculate h for every image
+				tempIntVec.push_back(h);
+			}
+			hVec.push_back(tempIntVec);                      // save k*h of every image
+			tempIntVec.erase(tempIntVec.begin(), tempIntVec.end());
+			
+			g = calculate_g(hVec[i], k);                  // calculate g for every image
+			pos = g % hTableSize;                         // find the position to insert the image in the hash table
+
+			node.pPos = i;
+			node.g = g;
+			node.pVec = pVec[i];
+			hashTable[pos].push_back(node);            // insert image in the hash table
+		}
+		
+		lHashTables.push_back(hashTable);
+		hashTable.erase(hashTable.begin(), hashTable.end());
+		hVec.erase(hVec.begin(), hVec.end());
+	}
+}
+
 vector<distanceNode> approximate_nearest_neighbor(vector<unsigned char> qVec, vector < vector< vector <hTableNode> > > lHashTables, int L, int pos, int d, int N, ofstream &ofile){
 	unsigned int temp;
 	distanceNode node;
