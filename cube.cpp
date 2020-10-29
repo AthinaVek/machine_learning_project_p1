@@ -43,93 +43,30 @@ int main(int argc, char** argv){
 	    
 	    vector< vector <hTableNode> > hashTable;       // hash table
 
-        for(int y=0; y<hTableSize; y++){
-		    hashTable.push_back(vector<hTableNode>()); //initialize the first index with a 2D vector
-		}
-
-        for (int i=0; i<k; i++){
-			tempIntVec = get_s(w, d);                     //s_i uniform random generator
-			sVec.push_back(tempIntVec);
-			tempIntVec.erase(tempIntVec.begin(), tempIntVec.end());
-        }
-        
-        for (int i=0; i < number_of_images; i++){
-			for (int j = 0; j < k; j++){
-				aVec = calculate_a(pVec[i], sVec[j], w, d);  // calculate a for every image
-				h = calculate_h(aVec, m, M, d);              // calculate h for every image
-
-				exists = 0;
-				
-				for (int p=0; p<tempfVec.size(); p++){
-					if (h == tempfVec[p].h){
-						exists = 1;
-						fnode.h = h;
-						fnode.f = tempfVec[p].f;
-						break;
-					}
-				}
-				
-				if(exists == 0){
-					for (int j=0; j<fVec.size(); j++){
-						for (int p=0; p<fVec[j].size(); p++){
-							if (h == fVec[j][p].h){
-								exists = 1;
-								fnode.h = h;
-								fnode.f = fVec[j][p].f;
-								break;
-							}
-						}
-						if (exists){
-							break;
-						}
-					}
-				}
-				
-				if (exists == 0){
-					fnode.h = h;
-					fnode.f = get_f();
-				}
-				tempfVec.push_back(fnode);
-			}
-
-			fVec.push_back(tempfVec);                      // save f*k distinct of every image
-        	tempfVec.erase(tempfVec.begin(), tempfVec.end());
-        	
-        	p = calculate_p(fVec[i], k);
-
-        	
-
-			node.pPos = i;
-        	node.pVec = pVec[i];
-        	node.flag = 0;
-        	hashTable[p].push_back(node);            // insert image in the hash table
-
-		}
-
+        create_hashtable_cube(hashTable, pVec, sVec, aVec, fVec, tempIntVec, tempfVec, fnode, node, hTableSize, number_of_images, w, k, d, m, M);
+		
 		ifstream qfile (qFile);
 		if (qfile.is_open()){
 			read_data(qfile, &magic_number, &number_of_images, &n_rows, &n_cols, qVec, tempVec);
 
 			ofstream ofile (oFile);
 			if (ofile.is_open()){
-				for(int i = 0; i < 10; i++){
 				
+				for(int i = 0; i < 100; i++){
 					for (int j = 0; j < k; j++){
 						aVec = calculate_a(qVec[i], sVec[j], w, d);  // calculate a for every image
 						h = calculate_h(aVec, m, M, d);              // calculate h for every image
 						tempIntVec.push_back(h);
-					
+						
 						exists = 0;
-				
-						for (int p=0; p<tempfVec.size(); p++){
-							if (h == tempfVec[p].h){
+						for (int y=0; y<tempfVec.size(); y++){
+							if (h == tempfVec[y].h){
 								exists = 1;
 								fnode.h = h;
-								fnode.f = tempfVec[p].f;
+								fnode.f = tempfVec[y].f;
 								break;
 							}
 						}
-						
 						if(exists == 0){
 							for (int j=0; j<qfVec.size(); j++){
 								for (int p=0; p<qfVec[j].size(); p++){

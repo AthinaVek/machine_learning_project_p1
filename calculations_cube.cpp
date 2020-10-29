@@ -24,6 +24,69 @@ int get_f(){
 	
 }
 
+void create_hashtable_cube(vector< vector <hTableNode> > &hashTable, vector< vector<unsigned char> > pVec, vector< vector<int> > &sVec, vector<int> aVec, vector< vector<fNode> > &fVec, vector<int> tempIntVec, vector<fNode> tempfVec, fNode fnode, hTableNode node, int hTableSize, int number_of_images, double w, int k, int d, int m, int M){
+	
+	int h;
+	unsigned int g, p;
+	bool exists;
+	
+	for(int y=0; y<hTableSize; y++){
+		hashTable.push_back(vector<hTableNode>()); //initialize the first index with a 2D vector
+	}
+
+	for (int i=0; i<k; i++){
+		tempIntVec = get_s(w, d);                     //s_i uniform random generator
+		sVec.push_back(tempIntVec);
+		tempIntVec.erase(tempIntVec.begin(), tempIntVec.end());
+	}
+	
+	for (int i=0; i < number_of_images; i++){
+		for (int j = 0; j < k; j++){
+			aVec = calculate_a(pVec[i], sVec[j], w, d);  // calculate a for every image
+			h = calculate_h(aVec, m, M, d);              // calculate h for every image
+			exists = 0;
+			for (int y=0; y<tempfVec.size(); y++){
+				if (h == tempfVec[y].h){
+					exists = 1;
+					fnode.h = h;
+					fnode.f = tempfVec[y].f;
+					break;
+				}
+			}
+			if(exists == 0){
+				for (int j=0; j<fVec.size(); j++){
+					for (int p=0; p<fVec[j].size(); p++){
+						if (h == fVec[j][p].h){
+							exists = 1;
+							fnode.h = h;
+							fnode.f = fVec[j][p].f;
+							break;
+						}
+					}
+					if (exists){
+						break;
+					}
+				}
+			}
+			if (exists == 0){
+				fnode.h = h;
+				fnode.f = get_f();
+			}
+			tempfVec.push_back(fnode);
+		}
+		fVec.push_back(tempfVec);                      // save f*k distinct of every image
+		tempfVec.erase(tempfVec.begin(), tempfVec.end());
+		
+		p = calculate_p(fVec[i], k);
+
+		node.pPos = i;
+		node.pVec = pVec[i];
+		node.flag = 0;
+		hashTable[p].push_back(node);            // insert image in the hash table
+	}
+	
+}
+
 vector<int> hamming_dist(int probes, int p){
 	vector<int> hp;
 	int x, count, mask;

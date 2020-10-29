@@ -32,6 +32,8 @@ vector<int> hamming_dist(int probes, int p);
 
 int get_f();
 
+void create_hashtable_cube(vector< vector <hTableNode> > &hashTable, vector< vector<unsigned char> > pVec, vector< vector<int> > &sVec, vector<int> aVec, vector< vector<fNode> > &fVec, vector<int> tempIntVec, vector<fNode> tempfVec, fNode fnode, hTableNode node, int hTableSize, int number_of_images, double w, int k, int d, int m, int M);
+
 vector<distanceNode> approximate_nearest_neighbor_cube(vector<unsigned char> qVec, vector< vector <hTableNode> > hashTable, int p, int d, int N, int M, int probes);
 vector<distanceNode> approximate_range_search_cube(vector<unsigned char> qVec, vector< vector <hTableNode> > hashTable, int p, int d, double R, int M, int probes);
 
