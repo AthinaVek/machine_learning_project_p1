@@ -28,5 +28,5 @@ void lloyds_assignment(vector< vector<int> > &clusters, vector< vector<int> > te
 
 void update_centroids_median(vector< vector<unsigned char> > &centroids, vector <unsigned char> pDim, vector< vector<unsigned char> > pVec, vector< vector<int> > clusters, vector <unsigned char> tempC, int k, int d);
 
-vector<distanceNode> approximate_range_search_cluster(vector < vector<unsigned char> > centroids, vector < vector< vector <hTableNode> > > &lHashTables, int L, int pos, int d, double R, int cluster);
+vector<distanceNode> approximate_range_search_clusterLSH(vector < vector<unsigned char> > centroids, vector < vector< vector <hTableNode> > > &lHashTables, int L, int pos, int d, double R, int cluster);
 #endif

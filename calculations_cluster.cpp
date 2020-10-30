@@ -120,7 +120,7 @@ void update_centroids_median(vector< vector<unsigned char> > &centroids, vector 
 }
 
 
-vector<distanceNode> approximate_range_search_cluster(vector < vector<unsigned char> > centroids, vector < vector< vector <hTableNode> > > &lHashTables, int L, int pos, int d, double R, int cluster){
+vector<distanceNode> approximate_range_search_clusterLSH(vector < vector<unsigned char> > centroids, vector < vector< vector <hTableNode> > > &lHashTables, int L, int pos, int d, double R, int cluster){
 	unsigned int temp, x1, x2;
 	vector<distanceNode> distances;
 	distanceNode node;
