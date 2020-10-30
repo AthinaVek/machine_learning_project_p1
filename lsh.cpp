@@ -22,7 +22,6 @@ int main(int argc, char** argv){
 	vector< vector<unsigned char> > pVec, qVec;
 	vector<unsigned char> tempVec;
 	vector< vector<int> > sVec, hVec;
-	vector < vector< vector<int> > > lsVecs;
 	vector<int> aVec, tempIntVec;
 	vector<distanceNode> distLsh, distTrue, distRange;
 	
@@ -41,7 +40,7 @@ int main(int argc, char** argv){
         vector < vector< vector <hTableNode> > > lHashTables;       // vector with L hash tables
         vector< vector <hTableNode> > hashTable;       // hash table
 
-		create_hashtables_LSH(lHashTables, hashTable, pVec, sVec, lsVecs, aVec, hVec, node, L, hTableSize, k, d, number_of_images, w, m, M);
+		create_hashtables_LSH(lHashTables, hashTable, pVec, sVec, aVec, hVec, node, L, hTableSize, k, d, number_of_images, w, m, M);
 
 		ifstream qfile (qFile);
 	    if (qfile.is_open()){
