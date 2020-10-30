@@ -20,9 +20,11 @@ vector<int> get_s(double w, int d){
 
 vector<int> calculate_a(vector<unsigned char> pVec, vector<int> sVec, double w, int d){			//an argei na to kanoume ena-ena
 	vector<int> aVec;
+	float temp;
 	
 	for(int i = 0; i < d; i++){
-		aVec.push_back(floor((pVec[i]+w - sVec[i])/w));
+		temp = ((float)pVec[i] + w - (float)sVec[i])/w;
+		aVec.push_back(floor(temp));
 	}
 	return aVec;
 }
@@ -47,24 +49,25 @@ int modular_pow(int base, int exponent, int modulator){
 int calculate_h(vector<int> aVec, int m, int M, int d){
 	int h = 0, j, x;
 	j = d-1;
-
+	int temp;
 	for(int i = 0; i < d; i++){									//modulo
-		x = ((aVec[j]%M) * modular_pow(m, i, M)) % M;
-
-		//cout << "pow(m,i)%M = " << (int)pow(m,i) << " Modular exponentiation = " << modular_pow(m, i, M) << endl;
-		//cout << "x = " << x << endl;
+		
+		if((aVec[j]%M) < 0)
+			temp = aVec[j]%M + M;
+		else
+			temp = aVec[j]%M;
+			
+		x = (temp* modular_pow(m, i, M))%M;
 		
 		// if(x < 0)
-		// 	x += M;
+			// x += M;
 		
-		//cout << "x after = " << x << endl;
-		h += x % M;
+		h += x;
 		j--;
 	}
 	//cout << endl << "==============================" << endl << endl;
 	h = h % M;
-	
-	//cout << endl << endl << "==============================" << endl << endl << "h = " << h << endl << endl << "=============================="<< endl << endl << endl;
+	// cout << "h = " << h << endl;
 	return h;
 }
 
