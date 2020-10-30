@@ -10,8 +10,8 @@ unsigned int calculate_p(vector<fNode> fVec, int k){
 	return p;
 }
 
+
 int get_f(){
-	
 	int f;
 	
 	unsigned seed = chrono::system_clock::now().time_since_epoch().count();
@@ -19,16 +19,20 @@ int get_f(){
     uniform_int_distribution<int> distribution (0, 1);
     
     f = distribution(generator);
-	
 	return f;
-	
 }
 
-void create_hashtable_cube(vector< vector <hTableNode> > &hashTable, vector< vector<unsigned char> > pVec, vector< vector<int> > &sVec, vector<int> aVec, vector< vector<fNode> > &fVec, vector<int> tempIntVec, vector<fNode> tempfVec, fNode fnode, hTableNode node, int hTableSize, int number_of_images, double w, int k, int d, int m, int M){
-	
+
+void create_hashtable_cube(vector< vector <hTableNode> > &hashTable, vector< vector<unsigned char> > pVec, vector< vector<int> > &sVec, int hTableSize, int number_of_images, double w, int k, int d, int m, int M){
 	int h;
 	unsigned int g, p;
 	bool exists;
+	hTableNode node;
+	fNode fnode;
+
+	vector<int> aVec, tempIntVec;
+	vector< vector<fNode> > fVec; 
+	vector<fNode> tempfVec;
 	
 	for(int y=0; y<hTableSize; y++){
 		hashTable.push_back(vector<hTableNode>()); //initialize the first index with a 2D vector

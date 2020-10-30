@@ -14,19 +14,22 @@ int main(int argc, char** argv){
 	string iFile, confFile, oFile, method;
 	int magic_number=0, number_of_images=0, hTableSize;
     int n_rows=0, n_cols=0, d, count=0;
-    int k, L, kl, M, Ml, ky, probes, pos, h; 
+    int k, L, kl, M, Ml, ky, probes, pos, h, p; 
     int y, minc, changes = 6, first=1;
     unsigned int dist, g, min, x;
     double w, R;
-    hTableNode node;
+    fNode fnode;
+    bool exists;
     
 	vector< vector<unsigned char> > pVec, centroids;
 	vector<unsigned char> tempVec, pDim, tempC;
 	vector< vector<int> > clusters, temp;
-	vector< vector<int> > sVec, hVec;
+	vector< vector<int> > sVec;
 	vector<int> aVec, tempIntVec;
 	vector< vector<distanceNode> > distRange;
 	vector<distanceNode> distTemp;
+	vector< vector<fNode> > fVec, cfVec;
+	vector<fNode> tempfVec;
 	
 	srand (time(NULL));
 
@@ -93,7 +96,7 @@ int main(int argc, char** argv){
 			R = min/2;
 			w = 4*R;
 
-			create_hashtables_LSH(lHashTables, hashTable, pVec, sVec, aVec, hVec, node, L, hTableSize, kl, d, number_of_images, w, m, M);
+			create_hashtables_LSH(lHashTables, hashTable, pVec, L, hTableSize, kl, d, number_of_images, w, m, M);
 
 			for (int i=0; i<L; i++){
 				for (int j=0; j<lHashTables[i].size(); j++){
@@ -140,10 +143,28 @@ int main(int argc, char** argv){
 				R = R*2;
 				count++;
 			}
+
+			for(int i = 0; i < L; i++){															//for every hashtable
+				for(int j = 0; j < lHashTables[i].size(); j++){									//for every bucket
+					for(int y = 0; y < lHashTables[i][j].size(); y++){							//for every image in current bucket
+						if (lHashTables[i][j][y].flag == 0){									//if not assigned to a centroid
+							min = 4294967295;
+							for(int c = 0; c < k; c++){											//find min distance from centroids
+								x = manhattan_dist(pVec[lHashTables[i][j][y].pPos], centroids[c], d);
+								if (x < min){
+									min = x;
+									minc = c;
+								}
+							}
+							lHashTables[i][j][y].flag = 1;
+							lHashTables[i][j][y].cluster = minc;
+						}
+					}
+				}
+			}
 		}
 
 		else if(method == "Hypercube"){
-			vector < vector< vector <hTableNode> > > lHashTables;       // vector with L hash tables
 			vector< vector <hTableNode> > hashTable;       // hash table
 			
 			min = 4294967295;
@@ -161,7 +182,7 @@ int main(int argc, char** argv){
 			R = min/2;
 			w = 4*R;
 
-			// create_hashtables_LSH(lHashTables, hashTable, pVec, sVec, aVec, hVec, node, L, hTableSize, kl, d, number_of_images, w, m, M);
+			create_hashtable_cube(hashTable, pVec, sVec, hTableSize, number_of_images, w, ky, d, m, M);
 
 			// for (int i=0; i<L; i++){
 			// 	for (int j=0; j<lHashTables[i].size(); j++){
@@ -170,30 +191,56 @@ int main(int argc, char** argv){
 			// 	cout << "111111111111" << endl;
 			// }
 
-			// for (int i=0; i<kl; i++){
-			// 	tempIntVec = get_s(w, d);                     //s_i uniform random generator
-			// 	sVec.push_back(tempIntVec);
-			// 	tempIntVec.erase(tempIntVec.begin(), tempIntVec.end());
-			// }
+				
+			for (int i=0; i<k; i++){
+				distRange.push_back(vector<distanceNode>());
+			}
 
-			// for (int i=0; i<k; i++){
-			// 	distRange.push_back(vector<distanceNode>());
-			// }
+			count = 0;
+			while((count < 3) && (changes > 5)){
+				changes = 0;
+				for(int i=0; i<k; i++){
+					for(int j=0; j<ky; j++){                           //for every centroid
+						aVec = calculate_a(centroids[i], sVec[j], w, d);  // calculate a for every centroid
+						h = calculate_h(aVec, m, Ml, d);              // calculate h for every centroid
+				// 		cout << h << endl;
 
-			// count = 0;
-			// while((count < 3) && (changes > 5)){
-			// 	changes = 0;
-			// 	for(int i=0; i<k; i++){                           //for every centroid
-			// 		for (int j=0; j<kl; j++){
-			// 			aVec = calculate_a(centroids[i], sVec[j], w, d);  // calculate a for every centroid
-			// 			h = calculate_h(aVec, m, Ml, d);              // calculate h for every centroid
-			// 			// cout << h << endl;
-			// 			tempIntVec.push_back(h);
-			// 		}
-			// 		g = calculate_g(tempIntVec, kl);                  // calculate g for every centroid
-			// 		pos = g % hTableSize;                         // find the position to assign the centroid in the hash table
-			// 		tempIntVec.erase(tempIntVec.begin(), tempIntVec.end());
+						exists = 0;
+						for (int y=0; y<tempfVec.size(); y++){
+							if (h == tempfVec[y].h){
+								exists = 1;
+								fnode.h = h;
+								fnode.f = tempfVec[y].f;
+								break;
+							}
+						}
+						if(exists == 0){
+							for (int j=0; j<cfVec.size(); j++){
+								for (int p=0; p<cfVec[j].size(); p++){
+									if (h == cfVec[j][p].h){
+										exists = 1;
+										fnode.h = h;
+										fnode.f = cfVec[j][p].f;
+										break;
+									}
+								}
+								if (exists){
+									break;
+								}
+							}
+						}
+						if (exists == 0){
+							fnode.h = h;
+							fnode.f = get_f();
+						}
+						tempfVec.push_back(fnode);
+					}
+
+					cfVec.push_back(tempfVec);                    		  // save f*k distinct of every image
+					tempfVec.erase(tempfVec.begin(), tempfVec.end());
 					
+					p = calculate_p(cfVec[i], ky);
+				}
 			// 		distTemp = approximate_range_search_cluster(centroids, lHashTables, L, pos, d, R, i);
 			// 		changes += distTemp.size();
 			// 		// cout << distTemp.size() << endl;
@@ -201,13 +248,12 @@ int main(int argc, char** argv){
 
 			// 		// for (int y=0; y<distRange[i].size(); y++){
 			// 		// 	cout << distRange[i][y].pPos << endl;
-			// 		// }
 			// 		// cout << distRange[i].size() << endl;
 			// 		// cout << "===============" << endl;
-			// 	}
-			// 	R = R*2;
-			// 	count++;
-			// }
+
+				R = R*2;
+				count++;
+			}
 			
 			
 		}

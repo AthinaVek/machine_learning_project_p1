@@ -43,7 +43,11 @@ int main(int argc, char** argv){
 	    
 	    vector< vector <hTableNode> > hashTable;       // hash table
 
-        create_hashtable_cube(hashTable, pVec, sVec, aVec, fVec, tempIntVec, tempfVec, fnode, node, hTableSize, number_of_images, w, k, d, m, M);
+        create_hashtable_cube(hashTable, pVec, sVec, hTableSize, number_of_images, w, k, d, m, M);
+
+			for (int j=0; j<hashTable.size(); j++)
+				cout << hashTable[j].size() << endl; 
+
 		
 		ifstream qfile (qFile);
 		if (qfile.is_open()){
@@ -56,7 +60,6 @@ int main(int argc, char** argv){
 					for (int j = 0; j < k; j++){
 						aVec = calculate_a(qVec[i], sVec[j], w, d);  // calculate a for every image
 						h = calculate_h(aVec, m, M, d);              // calculate h for every image
-						tempIntVec.push_back(h);
 						
 						exists = 0;
 						for (int y=0; y<tempfVec.size(); y++){
