@@ -16,7 +16,7 @@ int main(int argc, char** argv){
     int n_rows=0, n_cols=0, d, count=0;
     int k, L, kl, M, Ml, ky, probes, h; 
     int y, minc, changes = 6, first=1;
-    unsigned int dist, g, min, x;
+    unsigned int dist, g, min, max, x;
     double w, R;
     fNode fnode;
     bool exists;
@@ -82,12 +82,16 @@ int main(int argc, char** argv){
 			vector< vector <hTableNode> > hashTable;       // hash table
 			
 			min = 4294967295;
+			max = 0;
 			for (int i=0; i<k; i++){
 				for (int j=0; j<k; j++){
 					if (i != j){
 						x = manhattan_dist(centroids[i], centroids[j], d);
 						if (x < min){
 							min = x;
+						}
+						if (x > max){
+							max = x;
 						}
 					}
 				}
@@ -120,11 +124,11 @@ int main(int argc, char** argv){
 			}
 
 			count = 0;
-			while((count < 3) && (changes > 5)){
-				changes = 0;
+			while((count < 3) && (R < max/2)){
+				// changes = 0;
 				for(int i=0; i<k; i++){                           //for every centroid
 					distTemp = approximate_range_search_clusterLSH(centroids, lHashTables, L, pos[i], d, R, i);
-					changes += distTemp.size();
+					// changes += distTemp.size();
 					distRange[i].insert(distRange[i].end(), distTemp.begin(), distTemp.end() ); 
 				}
 				R = R*2;
@@ -161,6 +165,9 @@ int main(int argc, char** argv){
 						x = manhattan_dist(centroids[i], centroids[j], d);
 						if (x < min){
 							min = x;
+						}
+						if (x > max){
+							max = x;
 						}
 					}
 				}
@@ -214,23 +221,26 @@ int main(int argc, char** argv){
 				cfVec.push_back(tempfVec);                    		  // save f*k distinct of every image
 				tempfVec.erase(tempfVec.begin(), tempfVec.end());
 				
-				pos[i] = calculate_p(cfVec[i], ky);
+				pos.push_back(calculate_p(cfVec[i], ky));
 			}
 
 			count = 0;
-			while((count < 3) && (changes > 5)){
-			// 	changes = 0;
-			// 	for(int i=0; i<k; i++){
-			// 		distRange = approximate_range_search_cube(centroids, hashTable, pos[i], d, R, M, probes);
-			// 		changes += distTemp.size();
-			// 		distRange[i].insert(distRange[i].end(), distTemp.begin(), distTemp.end() ); 
-			// 	}
+			while((count < 3) && (R < max/2)){
+				// changes = 0;
+				for(int i=0; i<k; i++){
+					distTemp = approximate_range_search_clusterCube(centroids, hashTable, pos[i], d, R, M, probes, i);
+					// changes += distTemp.size();
+					distRange[i].insert(distRange[i].end(), distTemp.begin(), distTemp.end() ); 
+					cout << distRange[i].size() << endl;
+				}
+				cout << "===============" << endl;
 				
-			
-				// 		// for (int y=0; y<distRange[i].size(); y++){
-				// 		// 	cout << distRange[i][y].pPos << endl;
-				// 		// cout << distRange[i].size() << endl;
-				// 		// cout << "===============" << endl;
+
+				// for (int y=0; y<distRange[i].size(); y++){
+				// 	cout << distRange[i][y].pPos << endl;
+				// 	cout << distRange[i].size() << endl;
+				// 	
+				// }
 
 				R = R*2;
 				count++;

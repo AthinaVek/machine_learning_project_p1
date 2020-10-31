@@ -151,3 +151,46 @@ vector<distanceNode> approximate_range_search_clusterLSH(vector < vector<unsigne
 	}
 	return distances;
  }
+
+
+ vector<distanceNode> approximate_range_search_clusterCube(vector < vector<unsigned char> > centroids, vector< vector <hTableNode> > &hashTable, int pos, int d, double R, int M, int probes, int cluster){
+ 	unsigned int temp, x1, x2;
+ 	int count=0;
+	vector<distanceNode> distances;
+	vector<int> ph;
+	distanceNode node;
+
+	ph = hamming_dist(probes-1, pos);                           // Find positions with Hamming distance 1
+	ph.insert(ph.begin(), pos);                                 // Put p position in position 0 to search first
+
+	for(int i=0; i<ph.size(); i++){                           // For every position with Hamming distance 1 until it searches M images
+	 	for(int j = 0; j < hashTable[ph[i]].size(); j++){
+			temp = manhattan_dist(centroids[cluster], hashTable[ph[i]][j].pVec, d);
+			if(temp < R){
+				if (hashTable[ph[i]][j].flag == 0){
+					hashTable[ph[i]][j].flag = 1;
+					hashTable[ph[i]][j].cluster = cluster;
+					node.pPos = j;
+					node.dist = temp;
+					distances.push_back(node);
+				}
+				else if(hashTable[ph[i]][j].cluster != cluster){
+					x1 = manhattan_dist(centroids[cluster], hashTable[ph[i]][j].pVec, d);
+					x2 = manhattan_dist(centroids[hashTable[ph[i]][j].cluster], hashTable[ph[i]][j].pVec, d);
+					if (x1 < x2){
+						hashTable[ph[i]][j].cluster = cluster;
+						node.pPos = j;
+						node.dist = temp;
+						distances.push_back(node);
+					}
+				}
+			}
+			count++;
+			if (count >= M)
+				break;
+		}
+		if (count >= M)
+			break;
+	}
+	return distances;
+ }
