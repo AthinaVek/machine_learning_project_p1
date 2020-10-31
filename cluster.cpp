@@ -231,9 +231,9 @@ int main(int argc, char** argv){
 					distTemp = approximate_range_search_clusterCube(centroids, hashTable, pos[i], d, R, M, probes, i);
 					// changes += distTemp.size();
 					distRange[i].insert(distRange[i].end(), distTemp.begin(), distTemp.end() ); 
-					cout << distRange[i].size() << endl;
+					// cout << distRange[i].size() << endl;
 				}
-				cout << "===============" << endl;
+				// cout << "===============" << endl;
 				
 
 				// for (int y=0; y<distRange[i].size(); y++){
@@ -246,7 +246,23 @@ int main(int argc, char** argv){
 				count++;
 			}
 			
-			
+			for(int j = 0; j < hashTable.size(); j++){									    //for every bucket
+				for(int y = 0; y < hashTable[j].size(); y++){							    //for every image in current bucket
+					if (hashTable[j][y].flag == 0){									//if not assigned to a centroid
+						min = 4294967295;
+						for(int c = 0; c < k; c++){											//find min distance from centroids
+							x = manhattan_dist(pVec[hashTable[j][y].pPos], centroids[c], d);
+							if (x < min){
+								min = x;
+								minc = c;
+							}
+						}
+						hashTable[j][y].flag = 1;
+						hashTable[j][y].cluster = minc;
+					}
+				}
+			}
+
 		}
 		else{
 			cout << "This method does not exist..." << endl;
