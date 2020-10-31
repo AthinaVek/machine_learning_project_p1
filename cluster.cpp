@@ -74,7 +74,6 @@ int main(int argc, char** argv){
 				first = 0;
 				count++;
 			}
-			cout << count << endl;
 		}
 
 		else if(method == "LSH"){
@@ -262,10 +261,10 @@ int main(int argc, char** argv){
 					}
 				}
 			}
-
 		}
 		else{
 			cout << "This method does not exist..." << endl;
+			return 0;
 		}
 	}
 	return 0;
