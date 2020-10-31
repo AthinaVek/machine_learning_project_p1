@@ -72,12 +72,13 @@ void create_hashtables_LSH(vector < vector< vector <hTableNode> > > &lHashTables
 	}
 }
 
-vector<distanceNode> approximate_nearest_neighbor(vector<unsigned char> qVec, vector < vector< vector <hTableNode> > > lHashTables, int L, int pos, int d, int N){
+vector<distanceNode> approximate_nearest_neighbor(vector<unsigned char> qVec, vector < vector< vector <hTableNode> > > lHashTables, int L, int pos, int d, int N, unsigned int g){
 	unsigned int temp;
 	distanceNode node;
 	vector<distanceNode> distances;
 	bool flag;
-	
+	int count = 0;
+
 	for(int i = 0; i < N; i++){
 		node.pPos = -1;
 		node.dist = 4294967295;                        //highest possible unsigned int
@@ -86,45 +87,62 @@ vector<distanceNode> approximate_nearest_neighbor(vector<unsigned char> qVec, ve
 	
 	for(int i = 0; i < L; i++){
 		for(int j = 0; j < lHashTables[i][pos].size(); j++){
-			temp = manhattan_dist(qVec, lHashTables[i][pos][j].pVec, d);
-			if(temp < distances[N-1].dist){
-				flag = 0;
-				for (int c=0; c<N; c++){
-					if (distances[c].pPos == lHashTables[i][pos][j].pPos){
-						flag = 1;
-					}
-				}
-				
-				if (flag == 0){
-					distances[N-1].dist = temp;
-					distances[N-1].pPos = lHashTables[i][pos][j].pPos;
-					for(int c=N-2; c>=0; c--){
-						if(distances[c].dist > distances[c+1].dist){
-							iter_swap(distances.begin() + c, distances.begin() + c+1);
+			if( lHashTables[i][pos][j].g == g){													//check value of g
+				temp = manhattan_dist(qVec, lHashTables[i][pos][j].pVec, d);
+				if(temp < distances[N-1].dist){
+					flag = 0;
+					for (int c=0; c<N; c++){
+						if (distances[c].pPos == lHashTables[i][pos][j].pPos){
+							flag = 1;
 						}
-						else{
-							break;
+					}
+					if (flag == 0){
+						count++;
+						distances[N-1].dist = temp;
+						distances[N-1].pPos = lHashTables[i][pos][j].pPos;
+						for(int c=N-2; c>=0; c--){
+							if(distances[c].dist > distances[c+1].dist){
+								iter_swap(distances.begin() + c, distances.begin() + c+1);
+							}
+							else{
+								break;
+							}
 						}
 					}
 				}
 			}
 		}
 	}
+	if(count < N){																				//if N-nearest neighbors not found, then put random neighbors
+		for(int i = 0; i < L; i++){
+			for(int j = 0; j < lHashTables[i][pos].size(); j++){
+				distances[count].dist = manhattan_dist(qVec, lHashTables[i][pos][j].pVec, d);
+				distances[count].pPos = lHashTables[i][pos][j].pPos;
+				count++;
+				if(count >= N)
+					break;
+			}
+			if(count >= N)
+				break;
+		}
+	}
 	return distances;
  }
 
-vector<distanceNode> approximate_range_search(vector<unsigned char> qVec, vector < vector< vector <hTableNode> > > lHashTables, int L, int pos, int d, double R){
+vector<distanceNode> approximate_range_search(vector<unsigned char> qVec, vector < vector< vector <hTableNode> > > lHashTables, int L, int pos, int d, double R, unsigned int g){
 	unsigned int temp;
 	vector<distanceNode> distances;
 	distanceNode node;
 	
 	for(int i = 0; i < L; i++){
 		for(int j = 0; j < lHashTables[i][pos].size(); j++){
-			temp = manhattan_dist(qVec, lHashTables[i][pos][j].pVec, d);
-			if(temp < R){
-				node.pPos = j;
-				node.dist = temp;
-				distances.push_back(node);
+			if( lHashTables[i][pos][j].g == g){	
+				temp = manhattan_dist(qVec, lHashTables[i][pos][j].pVec, d);
+				if(temp < R){
+					node.pPos = j;
+					node.dist = temp;
+					distances.push_back(node);
+				}
 			}
 		}
 	}
