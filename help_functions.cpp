@@ -54,7 +54,8 @@ void read_inputLSH(int* argc, char** argv, string* iFile, string* qFile, int* k,
 		*N = 1;
 		*R = 10000;
 	}
-	*w = 4 * (*R);
+	// *w = 4 * (*R);
+	*w = 400;
 }
 
 
@@ -153,7 +154,7 @@ void read_inputCluster(int* argc, char** argv, string* iFile, string* confFile, 
 		*iFile = "train-images-idx3-ubyte";                   //default values if not given by user
 		*confFile = "cluster.conf";
 		*oFile = "results_cluster.txt";
-		*method = "LSH";
+		*method = "Hypercube";
 	}
 }
 
