@@ -74,6 +74,7 @@ int main(int argc, char** argv){
 				first = 0;
 				count++;
 			}
+			silhouette(clusters, centroids, pVec, k, d, number_of_images);
 		}
 
 		else if(method == "LSH"){

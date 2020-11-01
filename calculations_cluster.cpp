@@ -196,11 +196,11 @@ vector<distanceNode> approximate_range_search_clusterLSH(vector < vector<unsigne
  }
 
 
-vector< int > silhouette(vector< vector<int> > clusters, vector< vector<unsigned char> > centroids, vector< vector<unsigned char> > pVec, int k, int d){
+void silhouette(vector< vector<int> > clusters, vector< vector<unsigned char> > centroids, vector< vector<unsigned char> > pVec, int k, int d, int number_of_images){
 	unsigned int a, b, min, temp, max;
-	int tempS, minC, av=0;
-	vector<int> averageCs;
+	int tempS, minC, sTotal=0;
 
+	cout << "Silhouette: [ ";
 	for (int i=0; i<k; i++){
 		tempS = 0;
 		for (int j=0; j<clusters[i].size(); j++){
@@ -237,9 +237,10 @@ vector< int > silhouette(vector< vector<int> > clusters, vector< vector<unsigned
 
 			tempS += (int)(b - a)/max;
 		}
-
-		averageCs.push_back(tempS/clusters[i].size());
-		av += averageCs[i];
+		cout << tempS/clusters[i].size() << ", ";
+		sTotal += tempS;
 	}
-	av = av/k;
+
+	sTotal = sTotal/number_of_images;
+	cout << sTotal << "]" << endl;
 }
