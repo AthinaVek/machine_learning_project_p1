@@ -77,7 +77,7 @@ int main(int argc, char** argv){
 
 					ofile  << "Query: " << i << endl;               // write to file
 					for (int j=0; j<N; j++){
-						ofile << "Nearest neighbor-N: " << distLsh[j].pPos << endl;
+						ofile << "Nearest neighbor-" << j+1 << ": " << distLsh[j].pPos << endl;
 						ofile << "distanceLSH: " << distLsh[j].dist << endl;
 						ofile << "distanceTrue: " << distTrue[j].dist << endl;
 					}
