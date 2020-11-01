@@ -50,16 +50,16 @@ int main(int argc, char** argv){
 		d = n_rows * n_cols;
 		hTableSize = number_of_images / NForTable;
 		
+		auto t1 = chrono::high_resolution_clock::now();
+		
 		k_means_init(centroids, number_of_images, pVec, k, d);
 		
 		if (ofile.is_open()){
 			if(method == "Classic"){
 				ofile << "Algorithm: Lloyds" << endl;
-				auto t1 = chrono::high_resolution_clock::now();
 
 				while((count < 40) && (changes > 5)){
 					changes = 0;
-
 					lloyds_assignment(clusters, temp, number_of_images, pVec, centroids, k, d, &changes, first);
 					
 					if(!first){
@@ -92,6 +92,7 @@ int main(int argc, char** argv){
 			}
 
 			else if(method == "LSH"){
+				ofile << "Algorithm:  Range Search LSH" << endl;
 				vector < vector< vector <hTableNode> > > lHashTables;       // vector with L hash tables
 				vector< vector <hTableNode> > hashTable;       // hash table
 				
@@ -135,10 +136,8 @@ int main(int argc, char** argv){
 
 				count = 0;
 				while((count < 3) && (R < max/2)){
-					// changes = 0;
 					for(int i=0; i<k; i++){                           //for every centroid
 						distTemp = approximate_range_search_clusterLSH(centroids, lHashTables, L, pos[i], d, R, i);
-						// changes += distTemp.size();
 						distRange[i].insert(distRange[i].end(), distTemp.begin(), distTemp.end() ); 
 					}
 					R = R*2;
@@ -163,9 +162,14 @@ int main(int argc, char** argv){
 						}
 					}
 				}
+				auto t2 = chrono::high_resolution_clock::now();
+				auto durationLSH = chrono::duration_cast<chrono::microseconds>( t2 - t1 ).count();
+
+				ofile << "clustering_time: " << durationLSH << endl;
 			}
 
 			else if(method == "Hypercube"){
+				ofile << "Algorithm:  Range Search Hypercube" << endl;
 				vector< vector <hTableNode> > hashTable;       // hash table
 				
 				min = 4294967295;
@@ -260,6 +264,18 @@ int main(int argc, char** argv){
 						}
 					}
 				}
+				auto t2 = chrono::high_resolution_clock::now();
+				auto durationHypercube = chrono::duration_cast<chrono::microseconds>( t2 - t1 ).count();
+
+				for(int i=0; i<k; i++){
+					ofile << "CLUSTER-" << i << " {size: " << clusters[i].size() << ", centroid: [";
+					for (int y=0; y<d-1; y++){
+						ofile << (int)centroids[i][y] << ", ";
+					}
+					ofile << (int)centroids[i][y] << "]}" << endl;
+				}
+
+				ofile << "clustering_time: " << durationHypercube << endl;
 				silhouette(clusters, centroids, pVec, k, d, ofile);
 			}
 		}

@@ -153,7 +153,7 @@ void read_inputCluster(int* argc, char** argv, string* iFile, string* confFile, 
 		*iFile = "train-images-idx3-ubyte";                   //default values if not given by user
 		*confFile = "cluster.conf";
 		*oFile = "results_cluster.txt";
-		*method = "Hypercube";
+		*method = "Classic";
 	}
 }
 
