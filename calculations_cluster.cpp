@@ -239,3 +239,18 @@ void silhouette(vector< vector<int> > clusters, vector< vector<unsigned char> > 
 	sTotal = sTotal/count;
 	ofile << sTotal << "]" << endl;
 }
+
+
+// void write_results(vector< vector<int> > clusters, vector< vector<unsigned char> > centroids, auto duration, int d, int k, ofstream &ofile){
+// 	int y;
+
+// 	for(int i=0; i<k; i++){
+// 		ofile << "CLUSTER-" << i << " {size: " << clusters[i].size() << ", centroid: [";
+// 		for (y=0; y<d-1; y++){
+// 			ofile << (int)centroids[i][y] << ", ";
+// 		}
+// 		ofile << (int)centroids[i][y] << "]}" << endl;
+// 	}
+
+// 	ofile << "clustering_time: " << duration << endl;
+// }

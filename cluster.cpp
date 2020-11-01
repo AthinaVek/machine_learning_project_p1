@@ -15,7 +15,7 @@ int main(int argc, char** argv){
 	int magic_number=0, number_of_images=0, hTableSize;
     int n_rows=0, n_cols=0, d, count=0;
     int k, L, kl, M, Ml, ky, probes, h; 
-    int y, minc, changes = 6, first=1;
+    int minc, changes = 6, first=1;
     unsigned int dist, g, min, max, x;
     double w, R;
     fNode fnode;
@@ -84,7 +84,7 @@ int main(int argc, char** argv){
 					for (int y=0; y<d-1; y++){
 						ofile << (int)centroids[i][y] << ", ";
 					}
-					ofile << (int)centroids[i][y] << "]}" << endl;
+					ofile << (int)centroids[i][d-1] << "]}" << endl;
 				}
 
 				ofile << "clustering_time: " << durationLloyds << endl;
@@ -174,7 +174,7 @@ int main(int argc, char** argv){
 					for (int y=0; y<d-1; y++){
 						ofile << (int)centroids[i][y] << ", ";
 					}
-					ofile << (int)centroids[i][y] << "]}" << endl;
+					ofile << (int)centroids[i][d-1] << "]}" << endl;
 				}
 				ofile << "clustering_time: " << durationLSH << endl;
 				silhouette(clusters, centroids, pVec, k, d, ofile);
@@ -285,7 +285,7 @@ int main(int argc, char** argv){
 					for (int y=0; y<d-1; y++){
 						ofile << (int)centroids[i][y] << ", ";
 					}
-					ofile << (int)centroids[i][y] << "]}" << endl;
+					ofile << (int)centroids[i][d-1] << "]}" << endl;
 				}
 
 				ofile << "clustering_time: " << durationHypercube << endl;
