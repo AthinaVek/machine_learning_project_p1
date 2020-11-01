@@ -56,7 +56,7 @@ int main(int argc, char** argv){
 			ofstream ofile (oFile);
 			if (ofile.is_open()){
 				
-				for(int i = 0; i < 100; i++){
+				for(int i = 0; i < number_of_images; i++){
 					for (int j = 0; j < k; j++){
 						aVec = calculate_a(qVec[i], sVec[j], w, d);  // calculate a for every image
 						h = calculate_h(aVec, m, M, d);              // calculate h for every image
