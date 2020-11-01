@@ -42,13 +42,8 @@ int main(int argc, char** argv){
 	    hTableSize = pow(2,k);
 	    
 	    vector< vector <hTableNode> > hashTable;       // hash table
-
         create_hashtable_cube(hashTable, pVec, sVec, hTableSize, number_of_images, w, k, d, m, M);
 
-			for (int j=0; j<hashTable.size(); j++)
-				cout << hashTable[j].size() << endl; 
-
-		
 		ifstream qfile (qFile);
 		if (qfile.is_open()){
 			read_data(qfile, &magic_number, &number_of_images, &n_rows, &n_cols, qVec, tempVec);

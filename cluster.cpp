@@ -90,7 +90,7 @@ int main(int argc, char** argv){
 
 				ofile << "clustering_time: " << durationLloyds << endl;
 
-				silhouette(clusters, centroids, pVec, k, d, number_of_images, ofile);
+				silhouette(clusters, centroids, pVec, k, d, ofile);
 			}
 
 			else if(method == "LSH"){
@@ -275,7 +275,7 @@ int main(int argc, char** argv){
 						}
 					}
 				}
-				silhouette(clusters, centroids, pVec, k, d, number_of_images, ofile);
+				silhouette(clusters, centroids, pVec, k, d, ofile);
 			}
 		}
 		else{
