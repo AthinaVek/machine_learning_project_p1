@@ -6,7 +6,6 @@ unsigned int calculate_p(vector<fNode> fVec, int k){
 	for (int i=0; i<k; i++){
 		p = fVec[i].f << (k-1-i) | p ;
 	}
-	
 	return p;
 }
 

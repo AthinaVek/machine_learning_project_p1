@@ -54,8 +54,8 @@ void read_inputLSH(int* argc, char** argv, string* iFile, string* qFile, int* k,
 		*N = 1;
 		*R = 10000;
 	}
-	// *w = 4 * (*R);
-	*w = 400;
+	*w = 4 * (*R);
+	// *w = 400;
 }
 
 
@@ -126,7 +126,6 @@ void read_inputCube(int* argc, char** argv, string* iFile, string* qFile, int* k
 		*N = 1;
 		*R = 10000;
 	}
-	
 	*w = 4 * (*R);
 }
 
@@ -176,7 +175,6 @@ void read_confFile(int* K, int* L, int* kl, int* M, int* ky, int* probes, string
 	*M = stoi(results[3]);
 	*ky = stoi(results[4]);
 	*probes = stoi(results[5]);
-	
 }
 
 

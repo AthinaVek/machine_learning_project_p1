@@ -2,7 +2,6 @@
 
 
 void k_means_init(vector< vector<unsigned char> > &centroids, int number_of_images, vector< vector<unsigned char> > pVec, int k, int d){
-	
 	int random, t = 0, y;
 	float x, max, min;
 	unsigned int dist;
@@ -16,7 +15,6 @@ void k_means_init(vector< vector<unsigned char> > &centroids, int number_of_imag
 	p.push_back(0);															//p(0) = 0
 	
 	while(t < k){
-		
 		for(int i = 1; i < number_of_images; i++){								//for every image
 			max = 0;
 			min = 4294967295;                                       			//highest possible unsigned int
@@ -49,14 +47,12 @@ void k_means_init(vector< vector<unsigned char> > &centroids, int number_of_imag
 	}
 }
 
+
 void lloyds_assignment(vector< vector<int> > &clusters, vector< vector<int> > temp, int number_of_images, vector< vector<unsigned char> > pVec, vector< vector<unsigned char> > centroids, int k, int d, int *changes, int first){
-	
 	int minc;
 	float min;
 	unsigned int dist;
 	bool notFound;
-	
-	
 	
 	for(int i = 0; i < number_of_images; i++){								//assign each image to centroids
 		min = 4294967295;                      								//highest possible unsigned int
@@ -89,14 +85,12 @@ void lloyds_assignment(vector< vector<int> > &clusters, vector< vector<int> > te
 				break;
 		}
 	}
-		
 	clusters = temp;
 	temp.erase(temp.begin(), temp.end());
-	
 }
 
+
 void update_centroids_median(vector< vector<unsigned char> > &centroids, vector <unsigned char> pDim, vector< vector<unsigned char> > pVec, vector< vector<int> > clusters, vector <unsigned char> tempC, int k, int d){
-	
 	double cSize;
 	int median;
 	
@@ -236,7 +230,6 @@ void silhouette(vector< vector<int> > clusters, vector< vector<unsigned char> > 
 			}
 
 			tempS += (int)(b - a)/max;
-			// cout << (int)(b - a)/max << endl;
 			count++;
 		}
 		ofile << tempS/clusters[i].size() << ", ";
@@ -245,5 +238,4 @@ void silhouette(vector< vector<int> > clusters, vector< vector<unsigned char> > 
 
 	sTotal = sTotal/count;
 	ofile << sTotal << "]" << endl;
-	// cout << "========" << count << endl;
 }

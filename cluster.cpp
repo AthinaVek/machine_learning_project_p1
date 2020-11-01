@@ -69,10 +69,9 @@ int main(int argc, char** argv){
 					else{
 						changes = 6;
 					}	
-					// new centroids
-					centroids.erase(centroids.begin(), centroids.end());
 					
-					update_centroids_median(centroids, pDim, pVec, clusters, tempC, k, d);
+					centroids.erase(centroids.begin(), centroids.end());                      
+					update_centroids_median(centroids, pDim, pVec, clusters, tempC, k, d);    			// new centroids
 					
 					first = 0;
 					count++;
@@ -89,7 +88,6 @@ int main(int argc, char** argv){
 				}
 
 				ofile << "clustering_time: " << durationLloyds << endl;
-
 				silhouette(clusters, centroids, pVec, k, d, ofile);
 			}
 
@@ -124,7 +122,6 @@ int main(int argc, char** argv){
 				for (int i=0; i<k; i++){
 					distRange.push_back(vector<distanceNode>());
 				}
-
 				for(int i=0; i<k; i++){                           //for every centroid
 					for (int j=0; j<kl; j++){
 						aVec = calculate_a(centroids[i], sVec[j], w, d);  // calculate a for every centroid
@@ -235,22 +232,10 @@ int main(int argc, char** argv){
 
 				count = 0;
 				while((count < 3) && (R < max/2)){
-					// changes = 0;
 					for(int i=0; i<k; i++){
 						distTemp = approximate_range_search_clusterCube(centroids, hashTable, pos[i], d, R, M, probes, i);
-						// changes += distTemp.size();
 						distRange[i].insert(distRange[i].end(), distTemp.begin(), distTemp.end() ); 
-						// cout << distRange[i].size() << endl;
 					}
-					// cout << "===============" << endl;
-					
-
-					// for (int y=0; y<distRange[i].size(); y++){
-					// 	cout << distRange[i][y].pPos << endl;
-					// 	cout << distRange[i].size() << endl;
-					// 	
-					// }
-
 					R = R*2;
 					count++;
 				}
