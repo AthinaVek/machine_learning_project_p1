@@ -191,7 +191,7 @@ vector<distanceNode> approximate_range_search_clusterLSH(vector < vector<unsigne
 
 
 void silhouette(vector< vector<int> > clusters, vector< vector<unsigned char> > centroids, vector< vector<unsigned char> > pVec, int k, int d, ofstream &ofile){
-	unsigned int a, b, min, temp, max;
+	int a, b, min, temp, max;
 	int tempS, minC, sTotal=0, count=0;
 
 	ofile << "Silhouette: [ ";
@@ -200,16 +200,16 @@ void silhouette(vector< vector<int> > clusters, vector< vector<unsigned char> > 
 		for (int j=0; j<clusters[i].size(); j++){
 			a = 0;
 			b = 0;
-			min = 4294967295;
+			min = 2147483647;							//max int value
 			for (int z=0; z<clusters[i].size(); z++){
 				if (j != z)
-					a += manhattan_dist(pVec[clusters[i][j]], pVec[clusters[i][z]], d);
+					a += (int)manhattan_dist(pVec[clusters[i][j]], pVec[clusters[i][z]], d);
 			}
 			a = a / clusters[i].size();
-
+			
 			for (int y=0; y<k; y++){
 				if (y != i){
-					temp = manhattan_dist(pVec[clusters[i][j]], centroids[y], d);
+					temp = (int)manhattan_dist(pVec[clusters[i][j]], centroids[y], d);
 					if (temp < min){
 						min = temp;
 						minC = y;
@@ -218,22 +218,22 @@ void silhouette(vector< vector<int> > clusters, vector< vector<unsigned char> > 
 			}
 
 			for (int z=0; z<clusters[minC].size(); z++){
-				b += manhattan_dist(pVec[clusters[i][j]], pVec[clusters[minC][z]], d);
+				b += (int)manhattan_dist(pVec[clusters[i][j]], pVec[clusters[minC][z]], d);
 			}
 			b = b / clusters[minC].size();
-
+			
 			if (a > b){
 				max = a;
 			}
 			else{
 				max = b;
 			}
-
-			tempS += (int)(b - a)/max;
+			
+			tempS += (b - a)/max;
 			count++;
 		}
 		ofile << tempS/clusters[i].size() << ", ";
-		sTotal += tempS;
+		sTotal += tempS/clusters[i].size();
 	}
 
 	sTotal = sTotal/count;
